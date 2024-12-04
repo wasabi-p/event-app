@@ -22,7 +22,7 @@ export default function SignUpLayout() {
       password: password,
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) Alert.alert("Please fill in all the fields");
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
     setLoading(false);
@@ -31,7 +31,8 @@ export default function SignUpLayout() {
   return (
     <View style={styles.container}>
       <Link href="/(tabs)/account/signin">
-        <FontAwesome size={25} name="arrow-left" />
+        <View style={styles.backIcon}><FontAwesome size={25} name="arrow-left" />
+        </View>
       </Link>
       <View style={styles.signUpBanner}>
         <Text style={styles.signUpText}>Sign Up</Text>
@@ -42,7 +43,6 @@ export default function SignUpLayout() {
             label="FirstName"
             onChangeText={(text) => setFirstName(text)}
             value={firstName}
-            placeholder="First Name"
             autoCapitalize={"none"}
           />
         </View>
@@ -51,7 +51,6 @@ export default function SignUpLayout() {
             label="Surname"
             onChangeText={(text) => setSurname(text)}
             value={surname}
-            placeholder="Surname"
             autoCapitalize={"none"}
           />
         </View>
@@ -89,8 +88,8 @@ export default function SignUpLayout() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 25,
-    padding: 12,
+    marginTop: 15,
+    padding: 15,
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -108,4 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
   },
+  backIcon:{
+    padding:10
+  }
 });

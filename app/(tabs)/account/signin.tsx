@@ -75,7 +75,7 @@ export default function SignInLayout() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
-    padding: 12,
+    padding: 15,
   },
   signInBanner: {
     padding: 50,
