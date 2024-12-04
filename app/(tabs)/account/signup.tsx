@@ -31,7 +31,7 @@ export default function SignUpLayout() {
   return (
     <View style={styles.container}>
       <Link href="/(tabs)/account/signin">
-        <FontAwesome style={styles.backIcon} size={25} name="arrow-left" />
+        <FontAwesome size={25} name="arrow-left" />
       </Link>
       <View style={styles.signUpBanner}>
         <Text style={styles.signUpText}>Sign Up</Text>
