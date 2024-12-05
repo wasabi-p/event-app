@@ -5,6 +5,10 @@ export default function AccountLayout() {
     <Stack>
         <Stack.Screen
           name="index"
+          options={{ headerShown: false, title: "index" }}
+        />
+          <Stack.Screen
+          name="profile"
           options={{ headerShown: false, title: "Account" }}
         />
       <Stack.Screen

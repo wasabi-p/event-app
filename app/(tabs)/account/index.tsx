@@ -1,50 +1,25 @@
-import supabase from "@/app/lib/supabase";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { StyleSheet, View, Alert, Button, AppState, Text } from "react-native";
+import { useEffect } from "react";
+import supabase from "../../lib/supabase"
 
-export default function accountSettings() {
-  const [user, setUser] = useState(null);
-
+export default function IndexPage() {
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setUser(user);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.replace("/(tabs)/account/profile");
       } else {
-        console.log("Error Acessing user details");
+        console.log("no user");
+      }
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        router.replace("/(tabs)/account/profile");
+      } else {
+        console.log("no user");
+        router.replace("/(tabs)/account/signin");
       }
     });
   }, []);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    Alert.alert("signed out");
-    if (error) {
-      Alert.alert("Error Signing Out User", error.message);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text></Text>
-      <View style={styles.verticallySpaced}>
-        <Button title="Log Out" onPress={() => handleLogout()}></Button>
-      </View>
-    </View>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 15,
-    padding: 15,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});

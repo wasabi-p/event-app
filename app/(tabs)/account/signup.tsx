@@ -28,7 +28,7 @@ export default function SignUpLayout() {
       },
     });
 
-    if (error) Alert.alert("Please fill in all the fields");
+    if (error) Alert.alert("Problem with credentials"), error.message;
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
     setLoading(false);
