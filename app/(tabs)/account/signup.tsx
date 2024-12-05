@@ -20,6 +20,12 @@ export default function SignUpLayout() {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
+      options: {
+        data: {
+          firstName: firstName,
+          surname: surname,
+        },
+      },
     });
 
     if (error) Alert.alert("Please fill in all the fields");
@@ -31,7 +37,8 @@ export default function SignUpLayout() {
   return (
     <View style={styles.container}>
       <Link href="/(tabs)/account/signin">
-        <View style={styles.backIcon}><FontAwesome size={25} name="arrow-left" />
+        <View style={styles.backIcon}>
+          <FontAwesome size={25} name="arrow-left" />
         </View>
       </Link>
       <View style={styles.signUpBanner}>
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
   },
-  backIcon:{
-    padding:10
-  }
+  backIcon: {
+    padding: 10,
+  },
 });

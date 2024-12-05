@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState,useEffect } from "react";
 import { Alert, StyleSheet, View, AppState, Text } from "react-native";
 import supabase from "../../lib/supabase";
 import { Button, Input } from "@rneui/themed";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -12,7 +12,8 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-export default function SignInLayout() {
+export default function SignInLayout() { 
+  const [user,setUser] = useState(null)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,8 @@ export default function SignInLayout() {
       email: email,
       password: password,
     });
+    Alert.alert("Welcome back")
+    router.replace("/(tabs)/home")
 
     if (error) Alert.alert("Please enter your email address and password!");
     setLoading(false);
