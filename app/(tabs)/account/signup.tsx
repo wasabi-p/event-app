@@ -28,7 +28,10 @@ export default function SignUpLayout() {
       },
     });
 
-    if (error) Alert.alert("Problem with credentials"), error.message;
+    if (error) {
+      console.log(error)
+      Alert.alert(error.message)
+    }
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
     setLoading(false);
@@ -47,7 +50,7 @@ export default function SignUpLayout() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <View style={styles.verticallySpaced}>
           <Input
-            label="FirstName"
+            label="First name"
             onChangeText={(text) => setFirstName(text)}
             value={firstName}
             autoCapitalize={"none"}
