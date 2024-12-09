@@ -8,7 +8,7 @@ export default function IndexPage() {
       if (session) {
         router.replace("/(tabs)/account/profile");
       } else {
-        console.log("no user");
+        console.log("please login");
       }
     });
 
