@@ -1,7 +1,15 @@
-import { Text, View, FlatList, Image, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import supabase from "@/app/lib/supabase";
 import { useEffect, useState } from "react";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import EventCard from "@/app/components/EventCard";
 
 export default function Tab() {
   const [eventsList, setEventsList] = useState([]);
@@ -14,19 +22,6 @@ export default function Tab() {
     const { data } = await supabase.from("events").select();
     setEventsList(data);
   }
-  const eventCard = ({ item }) => (
-    <View style={styles.eventCard}>
-      <Image source={{ uri: item.img }} style={styles.eventImage} />
-      <View>
-        <Text>{item.event_name}</Text>
-        <Text>{item.description}</Text>
-        <Text>
-          📅 {item.event_date} 🕒 {item.start_time}
-        </Text>
-        <Text>📍 {item.venue}</Text>
-      </View>
-    </View>
-  );
 
   return (
     <SafeAreaProvider>
@@ -34,7 +29,7 @@ export default function Tab() {
         <FlatList
           data={eventsList}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={eventCard}
+          renderItem={({ item }) => <EventCard event={item} />}
         />
       </SafeAreaView>
     </SafeAreaProvider>
