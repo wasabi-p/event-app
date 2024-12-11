@@ -11,11 +11,10 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => (
       <Image source={{ uri: event.img }} style={styles.eventImage} />
       <View>
         <Text>{event.event_name}</Text>
-        <Text>{event.description}</Text>
+        <Text>📍 {event.venue}</Text>
         <Text>
           📅 {event.event_date} 🕒 {event.start_time}
         </Text>
-        <Text>📍 {event.venue}</Text>
       </View>
     </TouchableOpacity>
   </View>
