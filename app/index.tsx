@@ -1,5 +1,5 @@
 import { Redirect,router } from "expo-router";
-import supabase from "./lib/supabase";
+import supabase from "../lib/supabase";
 import {useEffect, useState} from "react"
 import {Session} from "@supabase/supabase-js"
 

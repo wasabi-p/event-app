@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
-import supabase from "../../lib/supabase"
+import supabase from "@/lib/supabase"
 
 export default function IndexPage() {
   useEffect(() => {
@@ -8,7 +8,7 @@ export default function IndexPage() {
       if (session) {
         router.replace("/(tabs)/account/profile");
       } else {
-        console.log("no user");
+        console.log("please login");
       }
     });
 
