@@ -1,18 +1,46 @@
 import supabase from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
 import { useEffect } from "react";
-import { StyleSheet, View, Alert, Button } from "react-native";
+import { StyleSheet, View, Alert, Button, Text } from "react-native";
+import { useState } from "react";
+import { Profile } from "@/utils/types";
 
-export default function accountSettings({session}:{session:Session}) {
+export default function accountProfile() {
+  const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName] = useState<string>("");
+  const [surname, setSurname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
-    supabase.auth.getSession().then((session) => {
-      if(session){
-        console.log(session.data.session?.user.id)
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        getProfile(user.id);
       }
     });
-  }, [session]);
-  
+  }, []);
+
+  async function getProfile(id: string) {
+    try {
+      setLoading(true);
+      const { data, error, status } = await supabase
+        .from("profiles")
+        .select(`first_name, surname, email`)
+        .eq("user_id", id)
+        .single();
+      if (error && status !== 406) {
+        throw error;
+      }
+      if (data) {
+        setFirstName(data.first_name);
+        setSurname(data.surname);
+        setEmail(data.email);
+      }
+    } catch (error) {
+      if (error instanceof Error) Alert.alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     Alert.alert("Signed out!");
@@ -23,6 +51,9 @@ export default function accountSettings({session}:{session:Session}) {
 
   return (
     <View style={styles.container}>
+      <Text>{firstName}</Text>
+      <Text>{surname}</Text>
+      <Text>{email}</Text>
       <View style={styles.verticallySpaced}>
         <Button title="Log Out" onPress={() => handleLogout()}></Button>
       </View>

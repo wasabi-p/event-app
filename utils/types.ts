@@ -7,3 +7,10 @@ export type Event = {
   start_time: string;
   venue: string;
 };
+
+ export type Profile = {
+  id: number;
+  first_name: string;
+  surname: string;
+  email: string;
+ }
