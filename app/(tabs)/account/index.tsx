@@ -1,6 +1,15 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
 import supabase from "@/lib/supabase"
+import { AppState } from "react-native";
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 export default function IndexPage() {
   useEffect(() => {

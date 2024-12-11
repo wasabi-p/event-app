@@ -1,16 +1,9 @@
-import { useState, useEffect } from "react";
-import { Alert, StyleSheet, View, AppState, Text } from "react-native";
+import { useState} from "react";
+import { Alert, StyleSheet, View, Text } from "react-native";
 import supabase from "@/lib/supabase";
 import { Button, Input } from "@rneui/themed";
 import { Link, router } from "expo-router";
 
-AppState.addEventListener("change", (state) => {
-  if (state === "active") {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
-  }
-});
 
 export default function SignInLayout() {
   const [email, setEmail] = useState("");
