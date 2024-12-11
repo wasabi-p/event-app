@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, View, AppState, Text } from "react-native";
-import supabase from "../../lib/supabase";
+import supabase from "@/lib/supabase";
 import { Button, Input } from "@rneui/themed";
 import { Link } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";

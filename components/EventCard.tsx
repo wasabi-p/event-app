@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Event } from "../utils/types";
+import {Event} from "@/utils/types"
 
 interface EventCardProps {
   event: Event;

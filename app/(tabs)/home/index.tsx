@@ -1,27 +1,21 @@
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import supabase from "@/app/lib/supabase";
+import { FlatList, StyleSheet } from "react-native";
+import supabase from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import EventCard from "@/app/components/EventCard";
+import EventCard from "@/components/EventCard";
+import { Event } from "@/utils/types";
+import { getEventsList } from "@/utils/utils";
 
 export default function Tab() {
-  const [eventsList, setEventsList] = useState([]);
+  const [eventsList, setEventsList] = useState<Event[]>([]);
 
   useEffect(() => {
-    getEventsList();
+    const fetchEvents = async () => {
+      const events = await getEventsList().then();
+      setEventsList(events);
+    };
+    fetchEvents();
   }, []);
-
-  async function getEventsList() {
-    const { data } = await supabase.from("events").select();
-    setEventsList(data);
-  }
 
   return (
     <SafeAreaProvider>

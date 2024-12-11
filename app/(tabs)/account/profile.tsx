@@ -1,4 +1,4 @@
-import supabase from "@/app/lib/supabase";
+import supabase from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Alert, Button } from "react-native";
