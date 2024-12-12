@@ -22,7 +22,7 @@ export default function Tab() {
       <SafeAreaView style={styles.eventListContainer}>
         <FlatList
           data={eventsList}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.event_id.toString()}
           renderItem={({ item }) => <EventCard event={item} />}
         />
       </SafeAreaView>
