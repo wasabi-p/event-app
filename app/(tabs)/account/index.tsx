@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
-import supabase from "@/lib/supabase"
+import supabase from "@/lib/supabase";
 import { AppState } from "react-native";
 
 AppState.addEventListener("change", (state) => {
@@ -17,7 +17,7 @@ export default function IndexPage() {
       if (session) {
         router.replace("/(tabs)/account/profile");
       } else {
-        console.log("please login");
+        router.replace("/(tabs)/account/signin");
       }
     });
 
@@ -25,10 +25,8 @@ export default function IndexPage() {
       if (session) {
         router.replace("/(tabs)/account/profile");
       } else {
-        console.log("no user");
         router.replace("/(tabs)/account/signin");
       }
     });
   }, []);
-
 }
