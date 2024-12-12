@@ -4,6 +4,7 @@ import supabase from "@/lib/supabase";
 import { Button, Input } from "@rneui/themed";
 import { Link } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ScrollView } from "react-native";
 
 export default function SignUpLayout() {
   const [firstName, setFirstName] = useState("");
@@ -39,6 +40,7 @@ export default function SignUpLayout() {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Link href="/(tabs)/account/signin">
         <View style={styles.backIcon}>
           <FontAwesome size={25} name="arrow-left" />
@@ -92,6 +94,7 @@ export default function SignUpLayout() {
           color="orange"
         />
       </View>
+      </ScrollView>
     </View>
   );
 }
