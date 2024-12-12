@@ -1,12 +1,11 @@
 import { FlatList, StyleSheet } from "react-native";
-import supabase from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import EventCard from "@/components/EventCard";
 import { Event } from "@/utils/types";
 import { getEventsList } from "@/utils/utils";
 
-export default function Tab() {
+export default function Homepage() {
   const [eventsList, setEventsList] = useState<Event[]>([]);
 
   useEffect(() => {
