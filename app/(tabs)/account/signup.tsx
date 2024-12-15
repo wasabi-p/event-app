@@ -23,15 +23,14 @@ export default function SignUpLayout() {
       password: password,
       options: {
         data: {
-          firstName: firstName,
-          surname: surname,
+          name: firstName + " " + surname,
         },
       },
     });
 
     if (error) {
-      console.log(error)
-      Alert.alert(error.message)
+      console.log(error);
+      Alert.alert(error.message);
     }
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
@@ -41,59 +40,59 @@ export default function SignUpLayout() {
   return (
     <View style={styles.container}>
       <ScrollView>
-      <Link href="/(tabs)/account/signin">
-        <View style={styles.backIcon}>
-          <FontAwesome size={25} name="arrow-left" />
+        <Link href="/(tabs)/account/signin">
+          <View style={styles.backIcon}>
+            <FontAwesome size={25} name="arrow-left" />
+          </View>
+        </Link>
+        <View style={styles.signUpBanner}>
+          <Text style={styles.signUpText}>Sign Up</Text>
         </View>
-      </Link>
-      <View style={styles.signUpBanner}>
-        <Text style={styles.signUpText}>Sign Up</Text>
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <View style={styles.verticallySpaced}>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <View style={styles.verticallySpaced}>
+            <Input
+              label="First name"
+              onChangeText={(text) => setFirstName(text)}
+              value={firstName}
+              autoCapitalize={"none"}
+            />
+          </View>
+          <View style={styles.verticallySpaced}>
+            <Input
+              label="Surname"
+              onChangeText={(text) => setSurname(text)}
+              value={surname}
+              autoCapitalize={"none"}
+            />
+          </View>
           <Input
-            label="First name"
-            onChangeText={(text) => setFirstName(text)}
-            value={firstName}
+            label="Email"
+            leftIcon={{ type: "font-awesome", name: "envelope" }}
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+            placeholder="email@address.com"
             autoCapitalize={"none"}
           />
         </View>
         <View style={styles.verticallySpaced}>
           <Input
-            label="Surname"
-            onChangeText={(text) => setSurname(text)}
-            value={surname}
+            label="Password"
+            leftIcon={{ type: "font-awesome", name: "lock" }}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
+            placeholder="Password"
             autoCapitalize={"none"}
           />
         </View>
-        <Input
-          label="Email"
-          leftIcon={{ type: "font-awesome", name: "envelope" }}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Password"
-          leftIcon={{ type: "font-awesome", name: "lock" }}
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Password"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button
-          title="Sign up"
-          disabled={loading}
-          onPress={() => signUpWithEmail()}
-          color="orange"
-        />
-      </View>
+        <View style={styles.verticallySpaced}>
+          <Button
+            title="Sign up"
+            disabled={loading}
+            onPress={() => signUpWithEmail()}
+            color="orange"
+          />
+        </View>
       </ScrollView>
     </View>
   );

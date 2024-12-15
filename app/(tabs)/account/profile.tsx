@@ -6,8 +6,7 @@ import { Profile } from "@/utils/types";
 
 export default function accountProfile() {
   const [loading, setLoading] = useState(true);
-  const [firstName, setFirstName] = useState<string>("");
-  const [surname, setSurname] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
@@ -23,15 +22,14 @@ export default function accountProfile() {
       setLoading(true);
       const { data, error, status } = await supabase
         .from("profiles")
-        .select(`first_name, surname, email`)
+        .select(`display_name, email`)
         .eq("user_id", id)
         .single();
       if (error && status !== 406) {
         throw error;
       }
       if (data) {
-        setFirstName(data.first_name);
-        setSurname(data.surname);
+        setName(data.display_name);
         setEmail(data.email);
       }
     } catch (error) {
@@ -51,8 +49,7 @@ export default function accountProfile() {
 
   return (
     <View style={styles.container}>
-      <Text>{firstName}</Text>
-      <Text>{surname}</Text>
+      <Text>{name}</Text>
       <Text>{email}</Text>
       <View style={styles.verticallySpaced}>
         <Button title="Log Out" onPress={() => handleLogout()}></Button>
