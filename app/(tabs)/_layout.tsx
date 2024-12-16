@@ -5,9 +5,9 @@ export default function TabLayout() {
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: "purple" }}>
       <Tabs.Screen
-        name="home"
+        name="events"
         options={{
-          title: "Home",
+          title: "Events",
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="home" color={color} />

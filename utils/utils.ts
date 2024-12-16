@@ -8,3 +8,12 @@ export const getEventsList = async () => {
   }
   return data as Event[];
 };
+
+export const getEventDetails = async (event_id: number) => {
+  const { data, error } = await supabase
+    .from("events")
+    .select()
+    .eq("event_id", event_id)
+    .single()
+  return data as Event;
+};
