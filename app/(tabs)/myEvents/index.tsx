@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Button, StyleSheet, Text, View } from "react-native";
 
-const myEventsPage = () => {
+export default function myEventsPage () {
+    
   return (
     <View style={styles.eventPageContainer}>
-      <Text>My events page</Text>
+        <View>
+      <Button color="orange" title="+ Create New Event" onPress={()=>router.replace("/(tabs)/myEvents/newEvent")}/>
+      </View>
+      <View style={styles.mt20}>
+        <Text>My Events</Text>
+      </View>
+      <View>
+        <Text>Attending</Text>
+      </View>
     </View>
   );
 };
@@ -12,11 +21,11 @@ const myEventsPage = () => {
 const styles = StyleSheet.create({
   eventPageContainer: {
     padding: 10,
+    marginTop: 50,
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  eventImage: {
-    height: 200,
+  mt20: {
+    marginTop: 30,
   },
 });
-export default myEventsPage;

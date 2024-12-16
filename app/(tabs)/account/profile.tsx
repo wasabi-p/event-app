@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase";
 import { useEffect } from "react";
 import { StyleSheet, View, Alert, Button, Text } from "react-native";
 import { useState } from "react";
-import { Profile } from "@/utils/types";
+import { fetchUser, getProfile } from "@/utils/utils";
 
 export default function accountProfile() {
   const [loading, setLoading] = useState(true);
@@ -10,34 +10,20 @@ export default function accountProfile() {
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    const getUserAndProfile = async () => {
+      setLoading(true)
+      const user = await fetchUser();
       if (user) {
-        getProfile(user.id);
+        const profile = await getProfile(user.id);
+        if(profile){
+          setName(profile.display_name)
+          setEmail(profile.email)
+          setLoading(false)
+        }
       }
-    });
+    };
+    getUserAndProfile();
   }, []);
-
-  async function getProfile(id: string) {
-    try {
-      setLoading(true);
-      const { data, error, status } = await supabase
-        .from("profiles")
-        .select(`display_name, email`)
-        .eq("user_id", id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
-      if (data) {
-        setName(data.display_name);
-        setEmail(data.email);
-      }
-    } catch (error) {
-      if (error instanceof Error) Alert.alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
