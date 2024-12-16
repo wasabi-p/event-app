@@ -31,7 +31,7 @@ export default function SignInLayout() {
       password: password,
     });
     Alert.alert("Welcome back");
-    router.replace("/(tabs)/home");
+    router.replace("/(tabs)/events");
 
     if (error) Alert.alert(error.message);
     setLoading(false);

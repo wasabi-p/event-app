@@ -3,6 +3,8 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import supabase from "@/lib/supabase";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 
 export const signInWithGoogle = async () => {
   try {
@@ -14,7 +16,8 @@ export const signInWithGoogle = async () => {
         provider: "google",
         token: idToken
       });
-      console.log("error from server", error);
+      Alert.alert("Welcome back");
+      router.push("/(tabs)/events")
     } else {
       throw new Error("no ID token present!");
     }
