@@ -7,7 +7,11 @@ export default function myEventsLayout() {
         name="index"
         options={{ headerShown: false, title: "index" }}
       />
-         <Stack.Screen
+      <Stack.Screen
+        name="myEventsPage"
+        options={{ headerShown: false, title: "myEventsPage" }}
+      />
+      <Stack.Screen
         name="newEvent"
         options={{ headerShown: false, title: "newEvent" }}
       />

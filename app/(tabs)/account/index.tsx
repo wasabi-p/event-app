@@ -11,7 +11,7 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-export default function IndexPage() {
+export default function AccountIndexPage() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {

@@ -16,7 +16,7 @@ export const getMyEventsList = async (userId: string) => {
     .select()
     .eq("event_organiser", userId);
   if (error) {
-    console.error("Error fetching events", error);
+    console.error("Error fetching my events", error);
   }
   return data as Event[];
 };
@@ -27,6 +27,9 @@ export const getEventDetails = async (event_id: number) => {
     .select()
     .eq("event_id", event_id)
     .single();
+  if (error) {
+    console.error("Error fetching event details", error);
+  }
   return data as Event;
 };
 
@@ -50,6 +53,7 @@ export const getProfile = async (id: string) => {
       .eq("user_id", id)
       .single();
     if (error && status !== 406) {
+      console.error("Error fetching profile", error);
       throw error;
     }
     return data || null;

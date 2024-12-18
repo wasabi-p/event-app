@@ -26,15 +26,20 @@ export default function SignInLayout() {
 
   async function signInWithEmail() {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-    Alert.alert("Welcome back");
-    router.replace("/(tabs)/events");
+    if (error) {
+      Alert.alert(error.message);
+      setLoading(false);
+      return;
+    }
 
-    if (error) Alert.alert(error.message);
-    setLoading(false);
+    if (data?.session || data?.user) {
+      Alert.alert("Welcome back");
+      router.replace("/(tabs)/events");
+    }
   }
 
   return (

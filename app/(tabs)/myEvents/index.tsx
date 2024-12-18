@@ -1,50 +1,42 @@
 import { router } from "expo-router";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import MyEventsCard from "@/components/MyEventsCard"
-import { useEffect, useState } from "react";
-import { fetchUser, getMyEventsList } from "@/utils/utils";
+import { useEffect } from "react";
+import supabase from "@/lib/supabase";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function myEventsPage () {
-  const [myEventsList, setMyEventsList] = useState<Event[]>([]);
-
+export default function MyEventsIndexPage() {
   useEffect(() => {
-    const fetchMyEvents = async () => {
-      const currentUser = await fetchUser();
-      const events = await getMyEventsList(currentUser?.id)
-      setMyEventsList(events);
-    };
-    fetchMyEvents();
-  }, []);
-  
-  return (
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.replace("/(tabs)/myEvents/myEventsPage");
+      } else {
+        router.replace("/(tabs)/account/signin");
+      }
+    });
 
-    <View style={styles.eventPageContainer}>
-        <View>
-      <Button color="orange" title="+ Create New Event" onPress={()=>router.replace("/(tabs)/myEvents/newEvent")}/>
-      </View>
-      <View style={styles.mt20}>
-        <Text>My Events</Text>
-        <FlatList
-          data={myEventsList}
-          keyExtractor={(item) => item.event_id.toString()}
-          renderItem={({ item }) => <MyEventsCard event={item} />}
-        />
-      </View>
-      <View>
-        <Text>Attending</Text>
-      </View>
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        router.replace("/(tabs)/myEvents/myEventsPage");
+      } else {
+        router.replace("/(tabs)/account/signin");
+      }
+    });
+  }, []);
+
+  return (
+    <View style={styles.messageContainer}>
+      <Text style={styles.message}>Please Log into your account</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  eventPageContainer: {
-    padding: 10,
-    marginTop: 50,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  messageContainer: {
+    flex: 1,
+    padding: 30,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  mt20: {
-    marginTop: 30,
+  message: {
+    textAlign: "center",
   },
 });
