@@ -10,25 +10,39 @@ export const getEventsList = async () => {
   return data as Event[];
 };
 
+export const getMyEventsList = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("events")
+    .select()
+    .eq("event_organiser", userId);
+  if (error) {
+    console.error("Error fetching events", error);
+  }
+  return data as Event[];
+};
+
 export const getEventDetails = async (event_id: number) => {
   const { data, error } = await supabase
     .from("events")
     .select()
     .eq("event_id", event_id)
-    .single()
+    .single();
   return data as Event;
 };
 
 export const fetchUser = async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Error fetching user:', error);
-      return null;
-    }
-    return user;
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  if (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+  return user;
 };
 
-export const getProfile = async(id: string) => {
+export const getProfile = async (id: string) => {
   try {
     const { data, error, status } = await supabase
       .from("profiles")
@@ -38,9 +52,9 @@ export const getProfile = async(id: string) => {
     if (error && status !== 406) {
       throw error;
     }
-  return data || null;
+    return data || null;
   } catch (error) {
     if (error instanceof Error) Alert.alert(error.message);
-  } 
-    return null;
-}
+  }
+  return null;
+};

@@ -10,7 +10,7 @@ export default function Homepage() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const events = await getEventsList().then();
+      const events = await getEventsList()
       setEventsList(events);
     };
     fetchEvents();
