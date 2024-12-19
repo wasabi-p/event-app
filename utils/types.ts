@@ -17,3 +17,9 @@ export type Profile = {
   surname: string;
   email: string;
 };
+
+export type UserIdResponse = string | null
+
+export type DatePickerParams = {
+  date: Date | null;
+};

@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
 import supabase from "@/lib/supabase";
-import { AppState } from "react-native";
+import { AppState, StyleSheet, Text, View } from "react-native";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -11,11 +11,11 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-export default function AccountIndexPage() {
+export default function MyEventsIndexPage() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        router.replace("/(tabs)/account/profile");
+        router.replace("/(tabs)/myEvents/myEventsPage");
       } else {
         router.replace("/(tabs)/account/signin");
       }
@@ -23,7 +23,7 @@ export default function AccountIndexPage() {
 
     supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        router.replace("/(tabs)/account/profile");
+        router.replace("/(tabs)/myEvents/myEventsPage");
       } else {
         router.replace("/(tabs)/account/signin");
       }
