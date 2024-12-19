@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase";
 import { useEffect } from "react";
 import { StyleSheet, View, Alert, Button, Text } from "react-native";
 import { useState } from "react";
-import { fetchUser, getProfile } from "@/utils/utils";
+import { fetchUserId, getProfile } from "@/utils/utils";
 
 export default function accountProfile() {
   const [loading, setLoading] = useState(true);
@@ -12,9 +12,9 @@ export default function accountProfile() {
   useEffect(() => {
     const getUserAndProfile = async () => {
       setLoading(true)
-      const user = await fetchUser();
-      if (user) {
-        const profile = await getProfile(user.id);
+      const userId = await fetchUserId();
+      if (userId) {
+        const profile = await getProfile(userId);
         if(profile){
           setName(profile.display_name)
           setEmail(profile.email)

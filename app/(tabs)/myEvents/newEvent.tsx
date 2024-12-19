@@ -3,10 +3,11 @@ import { Input } from "@rneui/themed";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, View } from "react-native";
-import { fetchUser } from "@/utils/utils";
+import { fetchUserId } from "@/utils/utils";
 import supabase from "@/lib/supabase";
 import dayjs from "dayjs";
 import DateTimePicker from "react-native-ui-datepicker";
+import { SingleChange } from "react-native-ui-datepicker/lib/typescript/src/types";
 
 export default function newEvent() {
   const [eventName, setEventName] = useState("");
@@ -18,8 +19,8 @@ export default function newEvent() {
 
   useEffect(() => {
     const getCurrentUserId = async () => {
-      const currentUser = await fetchUser();
-      setOrganiser(currentUser?.user_metadata.sub);
+      const currentUser = await fetchUserId();
+      setOrganiser(currentUser);
     };
     getCurrentUserId();
   }, []);
@@ -53,29 +54,34 @@ export default function newEvent() {
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View style={styles.mainContainer}>
       <Link href="/(tabs)/myEvents">
         <View style={styles.backIcon}>
-          <FontAwesome size={25} name="arrow-left" />
+          <FontAwesome size={25} name="backward" />
         </View>
       </Link>
-      <Input label="Event Name" value={eventName} onChangeText={setEventName} />
-      <Input label="Venue" value={venue} onChangeText={setVenue} />
-      <Input
-        label="Description"
-        value={description}
-        onChangeText={setDescription}
-      />
-      <View style={styles.datePicker}>
-        <DateTimePicker
-          mode="single"
-          date={date}
-          timePicker={true}
-          onChange={(params: any) => {
-            if(params.date){
-              setDate(params.date)};
-          }}
+      <View style={styles.formContainer}>
+        <Input
+          label="Event Name"
+          value={eventName}
+          onChangeText={setEventName}
         />
+        <Input label="Venue" value={venue} onChangeText={setVenue} />
+        <Input
+          label="Description"
+          value={description}
+          onChangeText={setDescription}
+        />
+        <View style={styles.datePicker}>
+          <DateTimePicker
+            mode="single"
+            date={date}
+            timePicker={true}
+            onChange={(params: Parameters<SingleChange>[0]) => {
+              if (params.date) setDate(params.date as Date);
+            }}
+          />
+        </View>
       </View>
       <View style={styles.button}>
         <Button
@@ -90,16 +96,18 @@ export default function newEvent() {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    padding: 15,
+  },
   formContainer: {
-    marginTop: 20,
     padding: 15,
   },
   backIcon: {
     padding: 10,
-    paddingBottom: 20,
+    backgroundColor: "lightgrey",
   },
   datePicker: {
-    marginTop: 15,
+    marginTop: 5,
   },
   button: {
     marginTop: 10,

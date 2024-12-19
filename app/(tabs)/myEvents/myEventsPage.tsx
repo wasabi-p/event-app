@@ -1,27 +1,66 @@
 import { router } from "expo-router";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import MyEventsCard from "@/components/MyEventsCard"
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import MyEventsCard from "@/components/MyEventsCard";
 import { useEffect, useState } from "react";
-import { fetchUser, getMyEventsList } from "@/utils/utils";
+import { fetchUserId, getMyEventsList } from "@/utils/utils";
 import { Event } from "@/utils/types";
 
-export default function myEventsPage () {
+export default function myEventsPage() {
+  const [loading, setLoading] = useState<boolean>(true);
   const [myEventsList, setMyEventsList] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchMyEvents = async () => {
-      const loggedInUser = await fetchUser();
-      const myEvents: Event [] = await getMyEventsList(loggedInUser?.user_metadata.sub)
-      setMyEventsList(myEvents);
+      setLoading(true);
+      try {
+        const loggedInUser: string | null = await fetchUserId();
+
+        if (!loggedInUser) {
+          Alert.alert("Error", "No User logged in");
+          setMyEventsList([]);
+          return;
+        }
+        const myEvents: Event[] = await getMyEventsList(loggedInUser);
+        setMyEventsList(myEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+        Alert.alert(
+          "Error",
+          "Could not load your events. Please try again later."
+        );
+        setMyEventsList([]);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchMyEvents();
   }, []);
-  
-  return (
 
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Loading your events...</Text>
+      </View>
+    );
+  }
+
+  return (
     <View style={styles.eventPageContainer}>
-        <View>
-      <Button color="orange" title="+ Create New Event" onPress={()=>router.replace("/(tabs)/myEvents/newEvent")}/>
+      <View>
+        <Button
+          color="orange"
+          title="+ Create New Event"
+          onPress={() => router.replace("/(tabs)/myEvents/newEvent")}
+        />
       </View>
       <View style={styles.mt20}>
         <Text>My Events</Text>
@@ -36,7 +75,7 @@ export default function myEventsPage () {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   eventPageContainer: {
@@ -47,5 +86,10 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 30,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

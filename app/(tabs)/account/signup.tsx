@@ -42,7 +42,7 @@ export default function SignUpLayout() {
       <ScrollView>
         <Link href="/(tabs)/account/signin">
           <View style={styles.backIcon}>
-            <FontAwesome size={25} name="arrow-left" />
+            <FontAwesome size={25} name="backward" />
           </View>
         </Link>
         <View style={styles.signUpBanner}>
@@ -100,7 +100,7 @@ export default function SignUpLayout() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 15,
+    marginTop: 10,
     padding: 15,
   },
   verticallySpaced: {
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signUpBanner: {
+    marginTop:7.5,
     padding: 50,
     backgroundColor: "purple",
   },
@@ -119,7 +120,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
   },
-  backIcon: {
-    padding: 10,
-  },
+  backIcon: { padding: 10, backgroundColor: "lightgrey", borderRadius: 2 },
 });

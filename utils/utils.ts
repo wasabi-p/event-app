@@ -1,5 +1,5 @@
 import supabase from "@/lib/supabase";
-import { Event } from "@/utils/types";
+import { Event, UserIdResponse } from "@/utils/types";
 import { Alert } from "react-native";
 
 export const getEventsList = async () => {
@@ -33,16 +33,20 @@ export const getEventDetails = async (event_id: number) => {
   return data as Event;
 };
 
-export const fetchUser = async () => {
+export const fetchUserId = async (): Promise<UserIdResponse> => {
   const {
     data: { user },
     error,
   } = await supabase.auth.getUser();
+  if (!user?.id) {
+    console.log("no user ID found");
+    return null;
+  }
   if (error) {
     console.error("Error fetching user:", error);
     return null;
   }
-  return user;
+  return user.id;
 };
 
 export const getProfile = async (id: string) => {
