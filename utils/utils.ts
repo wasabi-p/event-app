@@ -66,3 +66,26 @@ export const getProfile = async (id: string) => {
   }
   return null;
 };
+
+
+export const updateEventDetails = async (
+  event_id: number,
+  updatedDetails: {
+    event_name: string;
+    venue: string;
+    event_date: string;
+    start_time: string;
+    description: string;
+  }
+) => {
+  const { error } = await supabase
+    .from("events")
+    .update(updatedDetails)
+    .eq("event_id", event_id);
+
+  if (error) {
+    console.error("Error updating event details:", error);
+    throw new Error(error.message);
+  }
+  return true;
+};

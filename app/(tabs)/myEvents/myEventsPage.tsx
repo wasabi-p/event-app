@@ -59,7 +59,7 @@ export default function myEventsPage() {
         <Button
           color="orange"
           title="+ Create New Event"
-          onPress={() => router.replace("/(tabs)/myEvents/newEvent")}
+          onPress={() => router.replace("/(tabs)/myEvents/newEventPage")}
         />
       </View>
       <View style={styles.mt20}>

@@ -1,18 +1,17 @@
-import { FontAwesome } from "@expo/vector-icons";
 import { Input } from "@rneui/themed";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Button, StyleSheet, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import { fetchUserId } from "@/utils/utils";
+import BackButton from "@/components/BackButton";
 import supabase from "@/lib/supabase";
 import dayjs from "dayjs";
-import DateTimePicker
-from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function newEvent() {
   const [eventName, setEventName] = useState("");
   const [venue, setVenue] = useState("");
-  const [time, setTime] = useState(new Date())
+  const [time, setTime] = useState(new Date());
   const [date, setDate] = useState(new Date());
   const [description, setDescription] = useState("");
   const [organiser, setOrganiser] = useState<string | null>(null);
@@ -56,7 +55,6 @@ export default function newEvent() {
     return eventName && venue && description && organiser && !isSubmitting;
   };
 
-
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
     setShowDatePicker(false);
     if (selectedDate) {
@@ -72,11 +70,7 @@ export default function newEvent() {
   };
   return (
     <View style={styles.mainContainer}>
-      <Link href="/(tabs)/myEvents">
-        <View style={styles.backIcon}>
-          <FontAwesome size={25} name="backward" />
-        </View>
-      </Link>
+      <Text style={styles.title}>Enter Your Event Details</Text>
       <View style={styles.formContainer}>
         <Input
           label="Event Name"
@@ -89,36 +83,36 @@ export default function newEvent() {
           value={description}
           onChangeText={setDescription}
         />
-        <View style={styles.datePicker}>
-         <View style={styles.datePicker}>
-          <Button
-            title={`Select Date: ${dayjs(date).format("YYYY-MM-DD")}`}
-            onPress={() => setShowDatePicker(true)}
-          />
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
+        <View>
+          <View>
+            <Button
+              title={`Select Date: ${dayjs(date).format("YYYY-MM-DD")}`}
+              onPress={() => setShowDatePicker(true)}
             />
-          )}
-          <Button
-            title={`Select Time: ${dayjs(time).format("HH:mm:ss")}`}
-            onPress={() => setShowTimePicker(true)}
-          />
-          {showTimePicker && (
-            <DateTimePicker
-              value={time}
-              mode="time"
-              display="default"
-              onChange={handleTimeChange}
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+            <Button
+              title={`Select Time: ${dayjs(time).format("HH:mm:ss")}`}
+              onPress={() => setShowTimePicker(true)}
             />
-          )}
-        </View>
+            {showTimePicker && (
+              <DateTimePicker
+                value={time}
+                mode="time"
+                display="default"
+                onChange={handleTimeChange}
+              />
+            )}
+          </View>
         </View>
       </View>
-      <View style={styles.button}>
+      <View style={styles.submitButton}>
         <Button
           color="orange"
           title={isSubmitting ? "Submitting..." : "+ Submit New Event"}
@@ -126,25 +120,27 @@ export default function newEvent() {
           disabled={!isFormValid()}
         />
       </View>
+      <BackButton />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title:{
+    fontSize: 30
   },
   formContainer: {
     padding: 15,
+    width: "100%",
   },
-  backIcon: {
-    padding: 10,
-    backgroundColor: "lightgrey",
-  },
-  datePicker: {
-    marginTop: 5,
-  },
-  button: {
+  submitButton: {
     marginTop: 10,
+    alignSelf: "stretch",
   },
 });

@@ -36,8 +36,9 @@ export default function accountProfile() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>User Profile</Text>
       <Image source={{uri:"https://placehold.co/100x100/png"}} style={styles.profilePic}/>
-      <Text>{name}</Text>
+      <Text style={styles.name}>{name}</Text>
       <Text>{email}</Text>
       <View style={styles.verticallySpaced}>
         <Button color="orange" title="Log Out" onPress={() => handleLogout()}></Button>
@@ -53,6 +54,9 @@ const styles = StyleSheet.create({
     alignItems:"center",
     padding: 15,
   },
+  title:{
+    fontSize: 30
+  },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
@@ -61,6 +65,9 @@ const styles = StyleSheet.create({
   profilePic:{
     height:100,
     aspectRatio:1
+  },
+  name:{
+    fontSize:20
   },
   mt20: {
     marginTop: 20,

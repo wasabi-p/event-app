@@ -19,7 +19,3 @@ export type Profile = {
 };
 
 export type UserIdResponse = string | null
-
-export type DatePickerParams = {
-  date: Date | null;
-};
