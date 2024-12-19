@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { StyleSheet, View, Alert, Button, Text } from "react-native";
 import { useState } from "react";
 import { fetchUserId, getProfile } from "@/utils/utils";
+import { Image } from "react-native";
 
 export default function accountProfile() {
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function accountProfile() {
 
   return (
     <View style={styles.container}>
+      <Image source={{uri:"https://placehold.co/100x100/png"}} style={styles.profilePic}/>
       <Text>{name}</Text>
       <Text>{email}</Text>
       <View style={styles.verticallySpaced}>
@@ -46,13 +48,19 @@ export default function accountProfile() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 15,
+    flex: 1,
+    justifyContent:"center",
+    alignItems:"center",
     padding: 15,
   },
   verticallySpaced: {
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: "stretch",
+  },
+  profilePic:{
+    height:100,
+    aspectRatio:1
   },
   mt20: {
     marginTop: 20,
