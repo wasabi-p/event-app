@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 
 export default function myEventsLayout() {
+  
   return (
     <Stack>
       <Stack.Screen

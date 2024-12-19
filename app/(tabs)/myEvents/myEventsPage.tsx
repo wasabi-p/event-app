@@ -3,17 +3,15 @@ import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import MyEventsCard from "@/components/MyEventsCard"
 import { useEffect, useState } from "react";
 import { fetchUser, getMyEventsList } from "@/utils/utils";
+import { Event } from "@/utils/types";
 
 export default function myEventsPage () {
   const [myEventsList, setMyEventsList] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchMyEvents = async () => {
-      const currentUser = await fetchUser();
-      if(!currentUser){
-        
-      }
-      const myEvents = await getMyEventsList(currentUser?.id)
+      const loggedInUser = await fetchUser();
+      const myEvents: Event [] = await getMyEventsList(loggedInUser?.user_metadata.sub)
       setMyEventsList(myEvents);
     };
     fetchMyEvents();

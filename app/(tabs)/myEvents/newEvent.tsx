@@ -19,7 +19,7 @@ export default function newEvent() {
   useEffect(() => {
     const getCurrentUserId = async () => {
       const currentUser = await fetchUser();
-      setOrganiser(currentUser?.id);
+      setOrganiser(currentUser?.user_metadata.sub);
     };
     getCurrentUserId();
   }, []);
@@ -71,7 +71,10 @@ export default function newEvent() {
           mode="single"
           date={date}
           timePicker={true}
-          onChange={(params) => setDate(params.date)}
+          onChange={(params: any) => {
+            if(params.date){
+              setDate(params.date)};
+          }}
         />
       </View>
       <View style={styles.button}>

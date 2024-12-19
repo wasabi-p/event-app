@@ -1,7 +1,15 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
 import supabase from "@/lib/supabase";
-import { StyleSheet, Text, View } from "react-native";
+import { AppState, StyleSheet, Text, View } from "react-native";
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 export default function MyEventsIndexPage() {
   useEffect(() => {
@@ -21,22 +29,4 @@ export default function MyEventsIndexPage() {
       }
     });
   }, []);
-
-  return (
-    <View style={styles.messageContainer}>
-      <Text style={styles.message}>Please Log into your account</Text>
-    </View>
-  );
 }
-
-const styles = StyleSheet.create({
-  messageContainer: {
-    flex: 1,
-    padding: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  message: {
-    textAlign: "center",
-  },
-});
