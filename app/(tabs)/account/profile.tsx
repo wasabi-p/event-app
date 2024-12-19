@@ -38,7 +38,7 @@ export default function accountProfile() {
       <Text>{name}</Text>
       <Text>{email}</Text>
       <View style={styles.verticallySpaced}>
-        <Button title="Log Out" onPress={() => handleLogout()}></Button>
+        <Button color="orange" title="Log Out" onPress={() => handleLogout()}></Button>
       </View>
     </View>
   );
