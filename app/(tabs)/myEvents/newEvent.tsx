@@ -6,16 +6,19 @@ import { Alert, Button, StyleSheet, View } from "react-native";
 import { fetchUserId } from "@/utils/utils";
 import supabase from "@/lib/supabase";
 import dayjs from "dayjs";
-import DateTimePicker from "react-native-ui-datepicker";
-import { SingleChange } from "react-native-ui-datepicker/lib/typescript/src/types";
+import DateTimePicker
+from "@react-native-community/datetimepicker";
 
 export default function newEvent() {
   const [eventName, setEventName] = useState("");
   const [venue, setVenue] = useState("");
+  const [time, setTime] = useState(new Date())
   const [date, setDate] = useState(new Date());
   const [description, setDescription] = useState("");
   const [organiser, setOrganiser] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   useEffect(() => {
     const getCurrentUserId = async () => {
@@ -53,6 +56,20 @@ export default function newEvent() {
     return eventName && venue && description && organiser && !isSubmitting;
   };
 
+
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+  };
+
+  const handleTimeChange = (event: any, selectedTime: Date | undefined) => {
+    setShowTimePicker(false);
+    if (selectedTime) {
+      setTime(selectedTime);
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <Link href="/(tabs)/myEvents">
@@ -73,14 +90,32 @@ export default function newEvent() {
           onChangeText={setDescription}
         />
         <View style={styles.datePicker}>
-          <DateTimePicker
-            mode="single"
-            date={date}
-            timePicker={true}
-            onChange={(params: Parameters<SingleChange>[0]) => {
-              if (params.date) setDate(params.date as Date);
-            }}
+         <View style={styles.datePicker}>
+          <Button
+            title={`Select Date: ${dayjs(date).format("YYYY-MM-DD")}`}
+            onPress={() => setShowDatePicker(true)}
           />
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
+          <Button
+            title={`Select Time: ${dayjs(time).format("HH:mm:ss")}`}
+            onPress={() => setShowTimePicker(true)}
+          />
+          {showTimePicker && (
+            <DateTimePicker
+              value={time}
+              mode="time"
+              display="default"
+              onChange={handleTimeChange}
+            />
+          )}
+        </View>
         </View>
       </View>
       <View style={styles.button}>

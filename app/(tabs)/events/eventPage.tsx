@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { getEventDetails } from "@/utils/utils";
 import { Event } from "@/utils/types";
+import { Button } from "react-native";
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
@@ -16,7 +17,6 @@ const eventPage = () => {
     fetchEvent();
   }, [event_id]);
 
-
   if (!event) {
     return (
       <View>
@@ -28,12 +28,13 @@ const eventPage = () => {
   return (
     <View style={styles.eventPageContainer}>
       <Text>{event.event_name}</Text>
-      <Image source={{uri: event.img}} style={styles.eventImage}/>
+      <Image source={{ uri: event.img }} style={styles.eventImage} />
       <Text>venue {event.venue}</Text>
       <Text>{event.event_date}</Text>
       <Text>{event.start_time}</Text>
       <Text>{event.finish_time}</Text>
       <Text>description for {event.description}</Text>
+      <Button title="+ Add to Calendar" color="orange" />
     </View>
   );
 };
