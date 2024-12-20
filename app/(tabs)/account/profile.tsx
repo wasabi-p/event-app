@@ -1,9 +1,10 @@
 import supabase from "@/lib/supabase";
 import { useEffect } from "react";
-import { StyleSheet, View, Alert, Button, Text } from "react-native";
+import { StyleSheet, View, Alert, Button, Text, ActivityIndicator } from "react-native";
 import { useState } from "react";
 import { fetchUserId, getProfile } from "@/utils/utils";
 import { Image } from "react-native";
+import { router } from "expo-router";
 
 export default function accountProfile() {
   const [loading, setLoading] = useState(true);
@@ -26,9 +27,19 @@ export default function accountProfile() {
     getUserAndProfile();
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Loading your profile...</Text>
+      </View>
+    );
+  }
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     Alert.alert("Signed out!");
+    router.replace("/(tabs)/events")
     if (error) {
       Alert.alert("Error Signing Out User", error.message);
     }
@@ -71,5 +82,10 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

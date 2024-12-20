@@ -32,10 +32,7 @@ export default function myEventsPage() {
         setMyEventsList(myEvents);
       } catch (error) {
         console.error("Error fetching events:", error);
-        Alert.alert(
-          "Error",
-          "Could not load your events. Please try again later."
-        );
+        Alert.alert("Could not load your events. Please try again later.");
         setMyEventsList([]);
       } finally {
         setLoading(false);
@@ -46,7 +43,7 @@ export default function myEventsPage() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="orange" />
         <Text>Loading your events...</Text>
       </View>
@@ -62,8 +59,8 @@ export default function myEventsPage() {
           onPress={() => router.replace("/(tabs)/myEvents/newEventPage")}
         />
       </View>
-      <View style={styles.mt20}>
-        <Text>My Events</Text>
+      <View style={styles.myEventsContainer}>
+        <Text style={styles.header}>My Events</Text>
         <FlatList
           data={myEventsList}
           keyExtractor={(item) => item.event_id.toString()}
@@ -71,7 +68,7 @@ export default function myEventsPage() {
         />
       </View>
       <View>
-        <Text>Attending</Text>
+        <Text style={styles.header}>Attending</Text>
       </View>
     </View>
   );
@@ -84,12 +81,15 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  mt20: {
+  myEventsContainer: {
     marginTop: 30,
   },
-  centered: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+  header:{
+    fontWeight:"600"
+  }
 });
