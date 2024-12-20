@@ -50,23 +50,22 @@ export const fetchUserId = async (): Promise<UserIdResponse> => {
 };
 
 export const getProfile = async (id: string) => {
-  try {
-    const { data, error, status } = await supabase
-      .from("profiles")
-      .select(`display_name, email`)
-      .eq("user_id", id)
-      .single();
-    if (error && status !== 406) {
-      console.error("Error fetching profile", error);
-      throw error;
-    }
-    return data || null;
-  } catch (error) {
-    if (error instanceof Error) Alert.alert(error.message);
-  }
-  return null;
-};
+  const { data, error, status } = await supabase
+    .from("profiles")
+    .select(`display_name, email`)
+    .eq("user_id", id)
+    .single();
 
+  if (error) {
+    if (status !== 406) {
+      console.error("Error fetching profile", error);
+    }
+    Alert.alert("Error", error.message);
+    return null;
+  }
+
+  return data || null;
+};
 
 export const updateEventDetails = async (
   event_id: number,

@@ -15,9 +15,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => (
     >
       <Image source={{ uri: event.img }} style={styles.eventImage} />
       <View>
-        <Text>{event.event_name}</Text>
-        <Text>{event.venue}</Text>
-        <Text>
+        <Text style={styles.eventTitle}>{event.event_name}</Text>
+        <Text style={styles.eventDetails}>{event.venue}</Text>
+        <Text style={styles.eventDetails}>
           {event.event_date}
         </Text>
       </View>
@@ -27,12 +27,25 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => (
 
 const styles = StyleSheet.create({
   eventCard: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    backgroundColor: "#FFFFFF",
+    padding: 16,
   },
   eventImage: {
     height: 180,
+    borderRadius: 3,
+    width: "100%",
+    marginBottom: 12,
+  },
+  eventTitle: {
+    fontSize: 25,
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: 6,
+  },
+  eventDetails: {
+    fontSize: 14,
+    color: "#777",
+    lineHeight: 20,
   },
 });
 
