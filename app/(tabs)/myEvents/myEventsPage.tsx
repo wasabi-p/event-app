@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import {
   ActivityIndicator,
-  Alert,
   Button,
   FlatList,
   StyleSheet,
@@ -9,36 +8,71 @@ import {
   View,
 } from "react-native";
 import MyEventsCard from "@/components/MyEventsCard";
+import MyAttendingEventCard from "@/components/AttendingEventCard";
 import { useEffect, useState } from "react";
-import { fetchUserId, getMyEventsList } from "@/utils/utils";
+import {
+  fetchEventsByIds,
+  fetchUserId,
+  getMyEventsList,
+  selectMyAttendingList,
+} from "@/utils/utils";
 import { Event } from "@/utils/types";
 
 export default function myEventsPage() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [myEventsList, setMyEventsList] = useState<Event[]>([]);
+  const [myAttendingList, setMyAttendingList] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchMyEvents = async () => {
+    const fetchMyEventsPageInfo = async () => {
       setLoading(true);
-      try {
-        const loggedInUser: string | null = await fetchUserId();
 
-        if (!loggedInUser) {
-          Alert.alert("Error", "No User logged in");
-          setMyEventsList([]);
-          return;
-        }
-        const myEvents: Event[] = await getMyEventsList(loggedInUser);
-        setMyEventsList(myEvents);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-        Alert.alert("Could not load your events. Please try again later.");
-        setMyEventsList([]);
-      } finally {
-        setLoading(false);
-      }
+      fetchUserId()
+        .then((loggedInUser) => {
+          if (!loggedInUser) {
+            console.error("No User logged in");
+            setMyEventsList([]);
+            setMyAttendingList([]);
+            return;
+          }
+          return Promise.all([
+            getMyEventsList(loggedInUser).catch((error) => {
+              console.error(error, "Error fetching events");
+              return [];
+            }),
+            selectMyAttendingList(loggedInUser).catch((error) => {
+              console.error(error, "Error fetching attending list");
+              return [];
+            }),
+          ]);
+        })
+        .then((results) => {
+          if (!results) return;
+          const [myEvents, myAttendingEventIds] = results;
+          setMyEventsList(myEvents);
+
+          if (myAttendingEventIds.length > 0) {
+            const attendingEventIds = myAttendingEventIds.map(
+              (item: { event_id: string }) => item.event_id
+            );
+
+            fetchEventsByIds(attendingEventIds)
+              .then((attendingEvents) => {
+                setMyAttendingList(attendingEvents);
+              })
+              .catch((error) => {
+                console.error("Error fetching full event details:", error);
+                setMyAttendingList([]);
+              });
+          } else {
+            setMyAttendingList([]);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
-    fetchMyEvents();
+    fetchMyEventsPageInfo();
   }, []);
 
   if (loading) {
@@ -49,6 +83,12 @@ export default function myEventsPage() {
       </View>
     );
   }
+
+  const AttendingEventCard = ({ item }: { item: Event }) => (
+    <View>
+      <Text>{item.event_name}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.eventPageContainer}>
@@ -68,7 +108,14 @@ export default function myEventsPage() {
         />
       </View>
       <View>
-        <Text style={styles.header}>Attending</Text>
+        <View>
+          <Text style={styles.header}>Attending</Text>
+        </View>
+        <FlatList
+          data={myAttendingList}
+          keyExtractor={(item) => item.event_id.toString()}
+          renderItem={({ item }) => <MyAttendingEventCard event={item} />}
+        />
       </View>
     </View>
   );
@@ -89,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  header:{
-    fontWeight:"600"
-  }
+  header: {
+    fontWeight: "600",
+  },
 });

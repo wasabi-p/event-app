@@ -88,3 +88,31 @@ export const updateEventDetails = async (
   }
   return true;
 };
+
+export const selectMyAttendingList = async (userId: string) => {
+  const { data, error } = await supabase
+    .from("attending")
+    .select("event_id")
+    .eq("user_id", userId);
+    
+    if (error) {
+      console.error("Error fetching events by IDs:", error);
+      return [];
+    }
+  return data;
+};
+
+export const fetchEventsByIds = async (
+  eventIds: string[]
+): Promise<Event[]> => {
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .in("event_id", eventIds);
+
+  if (error) {
+    console.error("Error fetching events by IDs:", error);
+    return [];
+  }
+  return data;
+};

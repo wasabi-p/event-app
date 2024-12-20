@@ -4,25 +4,78 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import { getEventDetails } from "@/utils/utils";
 import { Event } from "@/utils/types";
 import { Button } from "react-native";
+import supabase from "@/lib/supabase";
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<any>(null);
+  const [isAttending, setIsAttending] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchData = async () => {
       setLoading(true);
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+
       const eventDetails = await getEventDetails(+event_id);
       if (eventDetails) {
         setEvent(eventDetails);
       } else {
-        console.error("");
+        console.error("Event not found");
       }
+
+      if (user) {
+        const { data} = await supabase
+          .from("attending")
+          .select("event_id, user_id")
+          .eq("user_id", user.id)
+          .eq("event_id", event_id)
+          .single();
+
+        setIsAttending(!!data);
+      }
+
       setLoading(false);
     };
-    fetchEvent();
+
+    fetchData();
   }, [event_id]);
+
+  const toggleAttendance = async () => {
+    if (!user) {
+      console.error("User not logged in");
+      return;
+    }
+
+    if (isAttending) {
+      const { error } = await supabase
+        .from("attending")
+        .delete()
+        .match({ user_id: user.id, event_id: event_id });
+
+      if (error) {
+        console.error("Error removing attendance:", error.message);
+      } else {
+        setIsAttending(false);
+      }
+    } else {
+      const { error } = await supabase.from("attending").upsert({
+        user_id: user.id,
+        event_id: event_id,
+      });
+
+      if (error) {
+        console.error("Error updating attendance:", error.message);
+      } else {
+        setIsAttending(true);
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -50,9 +103,15 @@ const eventPage = () => {
         <Text>Date: {event.event_date}</Text>
         <Text>Start Time: {event.start_time}</Text>
         <Text>Description: {event.description}</Text>
-        <View style={styles.attendButton}>
-          <Button title="+ Attend" color="orange" />
-        </View>
+        {user && (
+          <View style={styles.attendButton}>
+            <Button
+              title={isAttending ? "- Unattend" : "+ Attend"}
+              color="orange"
+              onPress={toggleAttendance}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

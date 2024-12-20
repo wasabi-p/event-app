@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   eventImage: {
-    width: "30%",
+    width: "25%",
     aspectRatio: 1
   },
   eventDetails: {

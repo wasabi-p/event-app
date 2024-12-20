@@ -12,7 +12,6 @@ import {
 import {
   fetchUserId,
   getEventDetails,
-  updateEventDetails,
 } from "@/utils/utils";
 import BackButton from "@/components/BackButton";
 import supabase from "@/lib/supabase";
