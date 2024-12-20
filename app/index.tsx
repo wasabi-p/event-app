@@ -20,7 +20,7 @@ export default function Homepage() {
     );
   }
 
-  return <Redirect href={"/(tabs)/events"} />;
+  return <Redirect href={"/(tabs)/events/eventsHome"} />;
 }
 
 const styles = StyleSheet.create({
