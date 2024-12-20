@@ -39,7 +39,7 @@ export default function accountProfile() {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     Alert.alert("Signed out!");
-    router.replace("/(tabs)/events")
+    router.replace("/(tabs)/events/eventsHome")
     if (error) {
       Alert.alert("Error Signing Out User", error.message);
     }
