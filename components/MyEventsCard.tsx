@@ -29,9 +29,8 @@ const styles = StyleSheet.create({
   myEventCard: {
     display: "flex",
     flexDirection: "row",
-    padding: 7.5,
-    marginVertical: 5,
-    marginHorizontal: 10,
+    padding:7.5,
+    marginVertical: 2,
     backgroundColor: "#f8f8f8",
   },
   cardContent: {
@@ -59,6 +58,9 @@ const styles = StyleSheet.create({
   },
   editIcon: {
     position: "absolute",
+    backgroundColor:"lightgrey",
+    padding:5,
+    borderRadius:2,
     top: 10,
     right: 10,
     zIndex: 1, 

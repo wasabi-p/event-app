@@ -84,38 +84,38 @@ export default function myEventsPage() {
     );
   }
 
-  const AttendingEventCard = ({ item }: { item: Event }) => (
-    <View>
-      <Text>{item.event_name}</Text>
-    </View>
+  const renderMyEvents = ({ item }: { item: Event }) => (
+    <MyEventsCard event={item} />
+  );
+
+  const renderAttending = ({ item }: { item: Event }) => (
+    <MyAttendingEventCard event={item} />
   );
 
   return (
     <View style={styles.eventPageContainer}>
-      <View>
+      <View style={styles.createContainer}>
         <Button
           color="orange"
           title="+ Create New Event"
           onPress={() => router.replace("/(tabs)/myEvents/newEventPage")}
         />
       </View>
-      <View style={styles.myEventsContainer}>
-        <Text style={styles.header}>My Events</Text>
-        <FlatList
-          data={myEventsList}
-          keyExtractor={(item) => item.event_id.toString()}
-          renderItem={({ item }) => <MyEventsCard event={item} />}
-        />
-      </View>
-      <View>
-        <View>
-          <Text style={styles.header}>Attending</Text>
-        </View>
-        <FlatList
-          data={myAttendingList}
-          keyExtractor={(item) => item.event_id.toString()}
-          renderItem={({ item }) => <MyAttendingEventCard event={item} />}
-        />
+      <View style={styles.listContainer}>
+       <FlatList
+        data={[{ key: "myEvents", title: "My Events", data: myEventsList }, { key: "attending", title: "My Attending", data: myAttendingList }]}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => (
+          <View style={styles.sectionContainer}>
+            <Text style={styles.header}>{item.title}</Text>
+            <FlatList
+              data={item.data}
+              keyExtractor={(event) => event.event_id.toString()}
+              renderItem={item.key === "myEvents" ? renderMyEvents : renderAttending}
+            />
+          </View>
+        )}
+      />
       </View>
     </View>
   );
@@ -124,12 +124,18 @@ export default function myEventsPage() {
 const styles = StyleSheet.create({
   eventPageContainer: {
     padding: 10,
-    marginTop: 50,
+    marginTop: 30,
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  myEventsContainer: {
-    marginTop: 30,
+  createContainer:{
+    marginBottom:10
+  },
+  listContainer:{
+    marginBottom: 20
+  },
+  sectionContainer: {
+    marginBottom: 10,
   },
   loading: {
     flex: 1,
@@ -137,6 +143,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    fontWeight: "600",
+    fontWeight: "800",
+    fontSize: 15,
+    marginBottom: 5
   },
 });
