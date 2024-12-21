@@ -27,19 +27,18 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => (
 
 const styles = StyleSheet.create({
   eventCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "white",
     padding: 16,
   },
   eventImage: {
     height: 180,
-    borderRadius: 3,
     width: "100%",
     marginBottom: 12,
   },
   eventTitle: {
     fontSize: 25,
     fontWeight: "700",
-    color: "#333",
+    color: "black",
     marginBottom: 6,
   },
   eventDetails: {

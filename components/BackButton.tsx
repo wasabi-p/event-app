@@ -1,29 +1,33 @@
-import { FontAwesome } from '@expo/vector-icons'
-import { Link } from 'expo-router'
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 const BackButton = () => {
+  const goBack = () => {
+    router.back();
+  };
+
   return (
-    <Link href="/(tabs)/myEvents" style={styles.goBackButton}>
-    <View style={styles.backIcon}>
-      <FontAwesome size={25} name="backward" />
+    <View style={styles.goBackButton} onTouchEnd={goBack}>
+      <View style={styles.backIcon}>
+        <FontAwesome size={25} name="backward" />
+      </View>
     </View>
-  </Link>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-    backIcon: {
-        padding: 1
-      },
-      goBackButton:{
-        position: "absolute", 
-        bottom: 20, 
-        left: 20, 
-        backgroundColor: "lightgrey",
-        padding: 10,
-        borderRadius: 5,
-      }
-})
+  backIcon: {
+    padding: 1,
+  },
+  goBackButton: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    backgroundColor: "lightgrey",
+    padding: 10,
+    borderRadius: 5,
+  },
+});
 export default BackButton;
