@@ -1,11 +1,20 @@
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { getEventDetails } from "@/utils/utils";
 import { Event } from "@/utils/types";
 import { Button } from "react-native";
 import supabase from "@/lib/supabase";
-import BackButton from "@/components/BackButton"
+import BackButton from "@/components/BackButton";
+import * as Calendar from "expo-calendar";
+import RNCalendarEvents from "react-native-calendar-events";
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
@@ -31,7 +40,7 @@ const eventPage = () => {
       }
 
       if (user) {
-        const { data} = await supabase
+        const { data } = await supabase
           .from("attending")
           .select("event_id, user_id")
           .eq("user_id", user.id)
@@ -40,10 +49,8 @@ const eventPage = () => {
 
         setIsAttending(!!data);
       }
-
       setLoading(false);
     };
-
     fetchData();
   }, [event_id]);
 
@@ -77,6 +84,34 @@ const eventPage = () => {
       }
     }
   };
+
+  const saveToCalendar = () => {
+    RNCalendarEvents.requestPermissions()
+      .then((status) => {
+        if (status !== "authorized") {
+          Alert.alert("Permission required", "Please allow calendar access.");
+          throw new Error("Calendar permission not granted");
+        }
+
+        const eventStartDate = new Date(event.event_date + "T" + event.start_time);
+        const eventEndDate = new Date(eventStartDate.getTime() + 2 * 60 * 60 * 1000); // Default 2-hour duration
+
+        return RNCalendarEvents.saveEvent(event.event_name, {
+          location: event.venue,
+          startDate: eventStartDate.toISOString(),
+          endDate: eventEndDate.toISOString(),
+          notes: event.description,
+        });
+      })
+      .then((eventId) => {
+        Alert.alert("Success", "Event added to your calendar!");
+      })
+      .catch((error) => {
+        console.error("Error saving event to calendar:", error);
+        Alert.alert("Error", "Unable to add event to calendar.");
+      });
+  };
+
 
   if (loading) {
     return (
@@ -113,8 +148,15 @@ const eventPage = () => {
             />
           </View>
         )}
+        <View style={styles.attendButton}>
+          <Button
+            title="Save to Calendar"
+            color="lightblue"
+            onPress={saveToCalendar}
+          />
+        </View>
       </View>
-      <BackButton/>
+      <BackButton />
     </View>
   );
 };
