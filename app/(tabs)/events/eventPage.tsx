@@ -14,7 +14,6 @@ import { Button } from "react-native";
 import supabase from "@/lib/supabase";
 import BackButton from "@/components/BackButton";
 import * as Calendar from "expo-calendar";
-import RNCalendarEvents from "react-native-calendar-events";
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
@@ -86,20 +85,29 @@ const eventPage = () => {
   };
 
   const saveToCalendar = () => {
-    RNCalendarEvents.requestPermissions()
-      .then((status) => {
-        if (status !== "authorized") {
+    Calendar.requestCalendarPermissionsAsync()
+      .then(({ status }) => {
+        if (status !== "granted") {
           Alert.alert("Permission required", "Please allow calendar access.");
           throw new Error("Calendar permission not granted");
         }
-
+        return Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+      })
+      .then((calendars) => {
+        const defaultCalendar = calendars.find((cal) => cal.allowsModifications);
+        if (!defaultCalendar) {
+          Alert.alert("Error", "No writable calendar found.");
+          throw new Error("No writable calendar found");
+        }
+  
         const eventStartDate = new Date(event.event_date + "T" + event.start_time);
         const eventEndDate = new Date(eventStartDate.getTime() + 2 * 60 * 60 * 1000); // Default 2-hour duration
-
-        return RNCalendarEvents.saveEvent(event.event_name, {
+  
+        return Calendar.createEventAsync(defaultCalendar.id, {
+          title: event.event_name,
           location: event.venue,
-          startDate: eventStartDate.toISOString(),
-          endDate: eventEndDate.toISOString(),
+          startDate: eventStartDate,
+          endDate: eventEndDate,
           notes: event.description,
         });
       })
@@ -111,7 +119,6 @@ const eventPage = () => {
         Alert.alert("Error", "Unable to add event to calendar.");
       });
   };
-
 
   if (loading) {
     return (
