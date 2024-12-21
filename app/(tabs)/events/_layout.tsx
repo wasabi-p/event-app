@@ -4,8 +4,8 @@ export default function HomeLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="eventsHome"
-        options={{ headerShown: false, title: "eventsHome" }}
+        name="index"
+        options={{ headerShown: false, title: "index" }}
       />
       <Stack.Screen
         name="eventPage"

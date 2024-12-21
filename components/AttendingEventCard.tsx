@@ -1,11 +1,16 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Event } from "@/utils/types";
+import { router } from "expo-router";
 
 interface myAttendingCardProps {
   event: Event;
 }
 
 const MyAttendingEventCard: React.FC<myAttendingCardProps> = ({ event }) => (
+  <TouchableOpacity
+  onPress={() => {
+    router.push({ pathname: `/(tabs)/events/eventPage`, params: event });
+  }}>
   <View style={styles.cardContainer}>
     <Image source={{ uri: event.img }} style={styles.eventImage} />
     <View style={styles.eventDetails}>
@@ -14,6 +19,7 @@ const MyAttendingEventCard: React.FC<myAttendingCardProps> = ({ event }) => (
       <Text style={styles.eventInfo}>{event.event_date}</Text>
     </View>
   </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({

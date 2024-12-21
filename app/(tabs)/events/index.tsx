@@ -1,6 +1,5 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import EventCard from "@/components/EventCard";
 import { Event } from "@/utils/types";
 import { getEventsList } from "@/utils/utils";
@@ -18,40 +17,47 @@ export default function Homepage() {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.eventListContainer}>
+    <View>
+      <Text style={styles.headerText}>Upcoming Events</Text>
+      <View style={styles.eventListContainer}>
         <FlatList
           data={eventsList}
           keyExtractor={(item) => item.event_id.toString()}
           renderItem={({ item }) => <EventCard event={item} />}
+          ListEmptyComponent={
+            <Text style={styles.emptyNotification}>
+              Nobody wants to do anything
+            </Text>
+          }
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          ListHeaderComponent={() => (
-            <Text style={styles.headerText}>Upcoming Events</Text>
-          )}
         />
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   eventListContainer: {
-    flex: 1,
     backgroundColor: "#F9FAFB",
-    paddingTop: 20,
+    paddingTop: 10,
     paddingHorizontal: 16,
+    marginBottom: 130,
   },
   headerText: {
     fontSize: 26,
-    fontFamily:"sans-serif",
+    fontFamily: "Roboto",
     fontWeight: "800",
-    color: "purple",
-    marginBottom: 10,
+    color: "white",
     textAlign: "center",
-  },
-  separator: {
-    height: 1,
     backgroundColor: "purple",
-    marginVertical: 2,
+    width: "90%",
+    alignSelf: "center",
+    padding: 10,
+    margin: 5,
+  },
+  emptyNotification: {
+    textAlign: "center",
+    alignSelf: "center",
+    marginTop: 20,
+    color: "gray",
   },
 });

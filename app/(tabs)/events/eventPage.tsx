@@ -5,6 +5,7 @@ import { getEventDetails } from "@/utils/utils";
 import { Event } from "@/utils/types";
 import { Button } from "react-native";
 import supabase from "@/lib/supabase";
+import BackButton from "@/components/BackButton"
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
@@ -113,6 +114,7 @@ const eventPage = () => {
           </View>
         )}
       </View>
+      <BackButton/>
     </View>
   );
 };

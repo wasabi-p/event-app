@@ -1,37 +1,26 @@
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useEffect, useState } from "react";
-import supabase from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
-  const [session, setSession] = useState<Session | null>(null);
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setSession(session);
-    };
-    fetchSession();
-
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-      }
-    );
-  }, []);
 
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: "purple" }}>
-      <Tabs.Screen
+     <Tabs.Screen
         name="events"
         options={{
           title: "Whats On",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="calendar" color={color} />
+          tabBarButton: () => (
+            <TouchableOpacity
+              onPress={() => {
+                router.replace("/(tabs)/events");
+              }}
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            >
+              <FontAwesome size={25} name="calendar" color="purple"/>
+              <Text style={styles.tabTitle}>Whats On</Text>
+            </TouchableOpacity>
           ),
         }}
       />
@@ -40,21 +29,43 @@ export default function TabLayout() {
         options={{
           title: "My Events",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="list" color={color} />
+          tabBarButton: () => (
+            <TouchableOpacity
+              onPress={() => {
+                router.replace("/(tabs)/myEvents");
+              }}
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            >
+              <FontAwesome size={25} name="list" color="purple"/>
+              <Text style={styles.tabTitle}>Manage Events</Text>
+            </TouchableOpacity>
           ),
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
-          title: session ? "Account" : "Log In",
+          title:"Account",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="drivers-license" color={color} />
+          tabBarButton: () => (
+            <TouchableOpacity
+              onPress={() => {
+                router.replace("/(tabs)/account");
+              }}
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            >
+              <FontAwesome size={25} name="drivers-license" color="purple"/>
+              <Text style={styles.tabTitle}>Account</Text>
+            </TouchableOpacity>
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabTitle: {
+    fontSize: 10,
+    color: "purple",
+}})

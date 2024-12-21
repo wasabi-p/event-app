@@ -37,8 +37,7 @@ export default function SignInLayout() {
     }
 
     if (data?.session || data?.user) {
-      Alert.alert("Welcome back");
-      router.replace("/(tabs)/events/eventsHome");
+      router.replace("/(tabs)/account/profile");
     }
   }
 
