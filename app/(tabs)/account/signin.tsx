@@ -15,13 +15,11 @@ export default function SignInLayout() {
   const [loading, setLoading] = useState(false);
 
   GoogleSignin.configure({
-    webClientId:
-      "872115393883-56gpu5o6n4vis3i4nb6rmg6s77e2m5qs.apps.googleusercontent.com",
+    webClientId: process.env.GOOGLE_WEB_CLIENT_ID,
     scopes: ["https://www.googleapis.com/auth/drive"],
     forceCodeForRefreshToken: true,
     offlineAccess: true,
-    iosClientId:
-      " 872115393883-v02kpfv8d14n2rhi5lceqrfv256gg14e.apps.googleusercontent.com",
+    iosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
   });
 
   async function signInWithEmail() {
