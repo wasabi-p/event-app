@@ -18,4 +18,4 @@ export type Profile = {
   email: string;
 };
 
-export type UserIdResponse = string | null
+export type UserIdResponse = string | null;

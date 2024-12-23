@@ -14,74 +14,93 @@ import { Button } from "react-native";
 import supabase from "@/lib/supabase";
 import BackButton from "@/components/BackButton";
 import * as Calendar from "expo-calendar";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 const eventPage = () => {
   const { event_id } = useLocalSearchParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any>(null);
-  const [isAttending, setIsAttending] = useState<boolean | null>(null);
+  const [isAttending, setIsAttending] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    setLoading(true);
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
+    supabase.auth
+      .getUser()
+      .then(({ data: { user } }) => {
+        setUser(user);
 
-      const eventDetails = await getEventDetails(+event_id);
-      if (eventDetails) {
-        setEvent(eventDetails);
-      } else {
-        console.error("Event not found");
-      }
+        return getEventDetails(+event_id).then((eventDetails) => {
+          if (eventDetails) {
+            setEvent(eventDetails);
+          } else {
+            console.error("Event not found");
+            throw new Error("Event not found");
+          }
 
-      if (user) {
-        const { data } = await supabase
-          .from("attending")
-          .select("event_id, user_id")
-          .eq("user_id", user.id)
-          .eq("event_id", event_id)
-          .single();
-
-        setIsAttending(!!data);
-      }
-      setLoading(false);
-    };
-    fetchData();
+          if (user) {
+            return supabase
+              .from("attending")
+              .select("event_id, user_id")
+              .eq("user_id", user.id)
+              .eq("event_id", event_id)
+              .single();
+          }
+        });
+      })
+      .then(
+        (
+          response:
+            | PostgrestSingleResponse<{ event_id: any; user_id: any }>
+            | undefined
+        ) => {
+          if (response?.data) {
+            setIsAttending(true);
+          } else {
+            setIsAttending(false);
+          }
+        }
+      )
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [event_id]);
 
-  const toggleAttendance = async () => {
+  const toggleAttendance = () => {
     if (!user) {
       console.error("User not logged in");
-      return;
+      return Promise.resolve();
     }
 
-    if (isAttending) {
-      const { error } = await supabase
-        .from("attending")
-        .delete()
-        .match({ user_id: user.id, event_id: event_id });
-
-      if (error) {
-        console.error("Error removing attendance:", error.message);
-      } else {
-        setIsAttending(false);
+    const toggle = (
+      isAttending
+        ? supabase
+            .from("attending")
+            .delete()
+            .match({ user_id: user.id, event_id: event_id })
+            .then((result) => {
+              if (result.error) {
+                throw new Error(result.error.message);
+              }
+              return result;
+            })
+        : supabase
+            .from("attending")
+            .upsert({ user_id: user.id, event_id: event_id })
+    ).then((result) => {
+      if (result.error) {
+        throw new Error(result.error.message);
       }
-    } else {
-      const { error } = await supabase.from("attending").upsert({
-        user_id: user.id,
-        event_id: event_id,
-      });
+      return result;
+    });
 
-      if (error) {
-        console.error("Error updating attendance:", error.message);
-      } else {
-        setIsAttending(true);
-      }
-    }
+    toggle.then(() => {
+      setIsAttending(!isAttending);
+    });
   };
 
   const saveToCalendar = () => {
@@ -94,15 +113,25 @@ const eventPage = () => {
         return Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
       })
       .then((calendars) => {
-        const defaultCalendar = calendars.find((cal) => cal.allowsModifications);
+        const defaultCalendar = calendars.find(
+          (cal) => cal.allowsModifications
+        );
         if (!defaultCalendar) {
-          Alert.alert("Error", "No writable calendar found.");
+          Alert.alert("Error", "No calendar found.");
           throw new Error("No writable calendar found");
         }
-  
-        const eventStartDate = new Date(event.event_date + "T" + event.start_time);
-        const eventEndDate = new Date(eventStartDate.getTime() + 2 * 60 * 60 * 1000); // Default 2-hour duration
-  
+
+        if (!event) {
+          Alert.alert("Error", "Event details are missing.");
+          throw new Error("Event details are missing");
+        }
+
+        const eventStartDate = new Date(
+          `${event.event_date}T${event.start_time}`
+        );
+        const eventEndDate = new Date(eventStartDate);
+        eventEndDate.setHours(24, 0, 0, 0);
+
         return Calendar.createEventAsync(defaultCalendar.id, {
           title: event.event_name,
           location: event.venue,
@@ -112,7 +141,10 @@ const eventPage = () => {
         });
       })
       .then((eventId) => {
-        Alert.alert("Success", "Event added to your calendar!");
+        Alert.alert(
+          "Success",
+          "Event added to your calendar! Please allow a few minutes for it to appear"
+        );
       })
       .catch((error) => {
         console.error("Error saving event to calendar:", error);
