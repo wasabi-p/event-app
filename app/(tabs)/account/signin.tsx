@@ -4,23 +4,23 @@ import supabase from "@/lib/supabase";
 import { Button, Input } from "@rneui/themed";
 import { Link, router } from "expo-router";
 import { signInWithGoogle } from "@/components/GoogleSignIn";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from "@react-native-google-signin/google-signin";
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+// } from "@react-native-google-signin/google-signin";
 
 export default function SignInLayout() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  GoogleSignin.configure({
-    webClientId: process.env.GOOGLE_WEB_CLIENT_ID,
-    scopes: ["https://www.googleapis.com/auth/drive"],
-    forceCodeForRefreshToken: true,
-    offlineAccess: true,
-    iosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
-  });
+  // GoogleSignin.configure({
+  //   webClientId: process.env.GOOGLE_WEB_CLIENT_ID,
+  //   scopes: ["https://www.googleapis.com/auth/drive"],
+  //   forceCodeForRefreshToken: true,
+  //   offlineAccess: true,
+  //   iosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
+  // });
 
   async function signInWithEmail() {
     setLoading(true);
@@ -80,11 +80,11 @@ export default function SignInLayout() {
         />
       </View>
       <View style={[styles.signInWithGoogle, styles.mt20]}>
-        <GoogleSigninButton
+        {/* <GoogleSigninButton
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
           onPress={signInWithGoogle}
-        />
+        /> */}
       </View>
     </View>
   );
