@@ -1,9 +1,9 @@
 # Welcome to Event App 👋
 
-This is an [Expo](https://expo.dev) project created to be used on the android platform, further development will look to introduce iOS and web at some point in the future.
+This is an [Expo](https://expo.dev) project created to be used on the Android platform, further development will look to introduce iOS and web at some point in the future.
 
 ## Getting started(with the APK)
-You should be able to download the apk and install onto your android device, upon loading you will not be logged in and will only be able to browse the events page and see the details of each scheduled event.
+You should be able to download the apk from the releases section of this project's repo and install onto your android device, upon loading you will not be logged in and will only be able to browse the events page and see the details of each scheduled event.
 
 1. Homepage - here you will be presented with a list of all the events currently on our system, by pressing them you will be able to see them in more detail.
 
