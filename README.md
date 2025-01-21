@@ -16,7 +16,10 @@ or
 https://expo.dev/preview/update?message=removed%20back%20button%20from%20createEvent&updateRuntimeVersion=1.0.0&createdAt=2025-01-21T17%3A34%3A22.745Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=cc6b62ab-4a49-48bb-bf15-3f834e5954c5
 <br>
 <br>
-
+TestUser:
+test@mail.com
+testing123
+<br>
 ## Features and functions
 
 1. Homepage - here you will be presented with a list of all the events currently on our system, by pressing them you will be able to see them in more detail.
