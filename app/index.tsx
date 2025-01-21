@@ -1,6 +1,6 @@
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 
 export default function Homepage() {
   const [showSplash, setShowSplash] = useState(true);
@@ -14,6 +14,12 @@ export default function Homepage() {
   if (showSplash) {
     return (
       <View style={styles.splashContainer}>
+        <Image
+          source={{
+            uri: "https://gckoifagibogjyspagxt.supabase.co/storage/v1/object/public/eventappbuckket/Events-cuate.png",
+          }}
+          style={{width:400, height:400}}
+        />
         <Text style={styles.splashText}>What's Happening?</Text>
         <ActivityIndicator size="large" color="orange" />
       </View>

@@ -21,10 +21,10 @@ import supabase from "@/lib/supabase";
 
 export default function myEventsPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [myEventsList, setMyEventsList] = useState<Event[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [myEventsList, setMyEventsList] = useState<Event[]>([]);
   const [myAttendingList, setMyAttendingList] = useState<any[]>([]);
-  const [viewingMyEvents, setViewingMyEvents] = useState<boolean>(true);
+  const [viewingMyEvents, setViewingMyEvents] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMyEventsPageInfo = async () => {
@@ -136,6 +136,7 @@ export default function myEventsPage() {
       }
     />
   );
+
   return (
     <View style={styles.eventPageContainer}>
       <View style={styles.createContainer}>

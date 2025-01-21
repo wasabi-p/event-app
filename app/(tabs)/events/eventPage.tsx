@@ -195,7 +195,6 @@ const eventPage = () => {
           />
         </View>
       </View>
-      <BackButton />
     </View>
   );
 };

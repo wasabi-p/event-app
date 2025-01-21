@@ -39,7 +39,7 @@ export default function newEvent() {
       start_time: startTime,
       description: description,
       event_organiser: organiser,
-      img: "https://placehold.co/600x400/png",
+      img: "https://gckoifagibogjyspagxt.supabase.co/storage/v1/object/public/eventappbuckket/Events-cuate.png",
     });
 
     if (error) {
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title:{
-    fontSize: 30
+  title: {
+    fontSize: 30,
   },
   formContainer: {
     padding: 15,

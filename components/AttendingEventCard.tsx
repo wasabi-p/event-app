@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   eventName: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 4,
   },

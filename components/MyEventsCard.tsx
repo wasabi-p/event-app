@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 15,
     justifyContent: "center",
+    paddingBottom: 30
   },
   eventName: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 4,
   },
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     backgroundColor:"lightgrey",
     padding:5,
     borderRadius:2,
-    top: 10,
+    bottom: 10,
     right: 10,
     zIndex: 1, 
   }

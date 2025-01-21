@@ -117,12 +117,13 @@ export default function newEvent() {
   };
   return (
     <View style={styles.mainContainer}>
+      <BackButton />
       <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteEvent}>
         <View>
           <FontAwesome name="trash" size={25} color="black" />
         </View>
       </TouchableOpacity>
-      <Text style={styles.title}>Edit Your Event Details</Text>
+      <Text style={styles.title}>Edit Event Details</Text>
       <View style={styles.formContainer}>
         <Input
           label="Event Name"
@@ -134,6 +135,8 @@ export default function newEvent() {
           label="Description"
           value={description}
           onChangeText={setDescription}
+          multiline={true}
+          numberOfLines={8}
         />
         <View>
           <View>
@@ -172,7 +175,6 @@ export default function newEvent() {
           disabled={!isFormValid()}
         />
       </View>
-      <BackButton />
     </View>
   );
 }

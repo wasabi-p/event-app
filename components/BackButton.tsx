@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   goBackButton: {
     position: "absolute",
-    bottom: 20,
+    top: 20,
     left: 20,
     backgroundColor: "lightgrey",
     padding: 10,

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import EventCard from "@/components/EventCard";
 import { Event } from "@/utils/types";
@@ -6,15 +6,27 @@ import { getEventsList } from "@/utils/utils";
 import { Text } from "react-native";
 
 export default function Homepage() {
+  const [loading, setLoading] = useState(true);
   const [eventsList, setEventsList] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true)
       const events = await getEventsList();
       setEventsList(events);
+      setLoading(false)
     };
     fetchEvents();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="orange" />
+        <Text>Loading events...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -45,10 +57,9 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 26,
     fontFamily: "Roboto",
-    fontWeight: "800",
-    color: "white",
+    fontWeight: "900",
+    color: "black",
     textAlign: "center",
-    backgroundColor: "purple",
     width: "90%",
     alignSelf: "center",
     padding: 10,
@@ -59,5 +70,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 20,
     color: "gray",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
