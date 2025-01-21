@@ -19,7 +19,7 @@ https://expo.dev/preview/update?message=removed%20back%20button%20from%20createE
 
 ## Features and functions
 
-TestUser
+## Test User Details:
 <br>
 email: test@mail.com
 <br>
