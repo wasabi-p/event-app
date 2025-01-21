@@ -7,7 +7,7 @@ This is an [Expo](https://expo.dev) project created to be used on the Android pl
 You should be able to access a preview build of the app using Expo Go and following this link:
 <br>
 <br>
-<img src="https://qr.expo.dev/eas-update?slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&groupId=ce2d209c-0f55-4b23-ae56-6840f4b13119&host=u.expo.dev" alt="qr" width="300">
+<img src="https://qr.expo.dev/eas-update?slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&groupId=cc6b62ab-4a49-48bb-bf15-3f834e5954c5&host=u.expo.dev" alt="qr" width="300">
 <br>
 <br>
 or
