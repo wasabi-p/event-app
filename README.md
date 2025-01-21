@@ -13,7 +13,7 @@ You should be able to access a preview build of the app using Expo Go and follow
 or
 <br>
 <br>
- https://expo.dev/preview/update?message=eas%20update%20configured&updateRuntimeVersion=1.0.0&createdAt=2025-01-21T16%3A58%3A16.999Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=ce2d209c-0f55-4b23-ae56-6840f4b13119
+https://expo.dev/preview/update?message=removed%20back%20button%20from%20createEvent&updateRuntimeVersion=1.0.0&createdAt=2025-01-21T17%3A34%3A22.745Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=cc6b62ab-4a49-48bb-bf15-3f834e5954c5
 <br>
 <br>
 
