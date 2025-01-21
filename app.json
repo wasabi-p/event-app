@@ -75,6 +75,9 @@
     "owner": "wasabi_p",
     "runtimeVersion": "1.0.0",
     "updates": {
+      "enabled": true,                 
+      "fallbackToCacheTimeout": 0,    
+      "checkAutomatically": "ON_LOAD", 
       "url": "https://u.expo.dev/ed04246c-7945-41c4-9f33-c94187494cdc"
     }
   }
