@@ -120,7 +120,6 @@ export default function newEvent() {
           disabled={!isFormValid()}
         />
       </View>
-      <BackButton />
     </View>
   );
 }

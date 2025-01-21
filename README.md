@@ -2,20 +2,31 @@
 
 This is an [Expo](https://expo.dev) project created to be used on the Android platform, further development will look to introduce iOS and web at some point in the future.
 
-## Getting started(with the APK)
+## Getting started
 
-You should be able to download the apk from the releases section of this project's repo and install onto your android device, upon loading you will not be logged in and will only be able to browse the events page and see the details of each scheduled event.
+You should be able to access a preview build of the app using Expo Go and following this link:
+<br>
+<br>
+<img src="https://qr.expo.dev/eas-update?slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&groupId=ce2d209c-0f55-4b23-ae56-6840f4b13119&host=u.expo.dev" alt="qr" width="300">
+<br>
+<br>
+or
+<br>
+<br>
+ https://expo.dev/preview/update?message=eas%20update%20configured&updateRuntimeVersion=1.0.0&createdAt=2025-01-21T16%3A58%3A16.999Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=ce2d209c-0f55-4b23-ae56-6840f4b13119
+<br>
+<br>
+
+## Features and functions
 
 1. Homepage - here you will be presented with a list of all the events currently on our system, by pressing them you will be able to see them in more detail.
 
-2. Loggin in - use the tab naviagtion at the bottom of the page and press account, here you will be able to log in with an existing account/ Sign up/ sign in with Google
-
-To give it a try please scroll to the bottom of this file for test user details.
+2. Loggin in - Use the tab naviagtion at the bottom of the page and press account, here you will be able to log in with an existing account/ Sign up/ sign in with Google
 
 3. Once logged in you can look at your account info on the accounts tab, Manage Events displays current events you are the organiser of and in a separate list the events you are attending.
-   There is also a button to "Create Event" which allows you to insert all the details of an event you are organising and post it.
+There is also a button to "Create Event" which allows you to insert all the details of an event you are organising and post it.
 
-4. On the "Attending" list you can look at the events you are attending, by clicking on these events you will navigate to their page and you can save them to your personal calendar and toggle your "attending" status.
+4. On the "Attending" list you can look at the events you are attending, by clicking on these events you will navigate to their page and you can save them to your personal calendar and toggle your "attending" status which in turn updates your attending list.
 
 ## Getting started (Local Repo(for editting!))
 
@@ -53,14 +64,9 @@ In the output, you'll find options to open the app in a
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-This particular app has only been developed in an android environment so it will only run there.
+This particular app has only been developed in an android environment
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction)
-
-Test User Details:
-<br>
-email: test@mail.com<br>
-password: testing123
 
 Special Thanks and Credits:<br>
 Various visual elements from the app have not been created by me and the property of the following creatives:
