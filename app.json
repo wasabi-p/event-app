@@ -17,7 +17,14 @@
       }
     },
     "android": {
-      "permissions": ["INTERNET"],
+      "permissions": [
+        "INTERNET",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR",
+        "INTERNET",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -65,6 +72,10 @@
         "projectId": "ed04246c-7945-41c4-9f33-c94187494cdc"
       }
     },
-    "owner": "wasabi_p"
+    "owner": "wasabi_p",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/ed04246c-7945-41c4-9f33-c94187494cdc"
+    }
   }
 }
