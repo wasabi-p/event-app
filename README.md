@@ -22,7 +22,7 @@ https://expo.dev/preview/update?message=removed%20back%20button%20from%20createE
 1. Homepage - here you will be presented with a list of all the events currently on our system, by pressing them you will be able to see them in more detail.
 
 2. Loggin in - Use the tab naviagtion at the bottom of the page and press account, here you will be able to log in with an existing account/ Sign up/ sign in with Google
-<br>
+
 Test User Details:
 <br>
 email: test@mail.com
