@@ -1,6 +1,6 @@
 # Welcome to Event App 👋
 
-This is an [Expo](https://expo.dev) project created to be used on the Android platform, further development will look to introduce iOS and web at some point in the future.
+This is an [Expo](https://expo.dev) project created to be used on the Android platform and iOS, further development will look to introduce web at some point in the future.
 
 ## Getting started
 
