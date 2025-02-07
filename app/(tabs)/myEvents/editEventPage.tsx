@@ -56,7 +56,7 @@ export default function newEvent() {
   const handleUpdateEvent = async () => {
     setIsUpdating(true);
     const eventDate = dayjs(date).format("YYYY-MM-DD");
-    const startTime = dayjs(date).format("HH:mm:ss");
+    const startTime = dayjs(time).format("HH:mm:ss");
 
     const { error } = await supabase
       .from("events")

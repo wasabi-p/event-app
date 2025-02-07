@@ -3,7 +3,6 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import { fetchUserId } from "@/utils/utils";
-import BackButton from "@/components/BackButton";
 import supabase from "@/lib/supabase";
 import dayjs from "dayjs";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -29,8 +28,10 @@ export default function newEvent() {
 
   const insertEvent = async () => {
     setIsSubmitting(true);
+    console.log(time)
+    console.log(date)
     const eventDate = dayjs(date).format("YYYY-MM-DD");
-    const startTime = dayjs(date).format("HH:mm:ss");
+    const startTime = dayjs(time).format("HH:mm:ss");
 
     const { error } = await supabase.from("events").insert({
       event_name: eventName,

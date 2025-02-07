@@ -21,7 +21,7 @@ https://expo.dev/preview/update?message=removed%20back%20button%20from%20createE
 
 1. Homepage - here you will be presented with a list of all the events currently on our system, by pressing them you will be able to see them in more detail.
 
-2. Loggin in - Use the tab naviagtion at the bottom of the page and press account, here you will be able to log in with an existing account/ Sign up/ sign in with Google
+2. Loggin in - Use the tab naviagtion at the bottom of the page and press account, here you will be able to log in with an existing account/ Sign up
 
 Test User Details:
 <br>
@@ -59,7 +59,7 @@ To run a locally hosted version of this app you will first of all need to clone 
 
 4. Start the app
 
-To run the dev build correctly you will need to configure the .env file which you can correctly, Please contact me for this file. It contains the correct URL, API keys and ClientID keys to be able to run everything locally and is provided in a .env file you will need to copy into the root directory of the app.
+To run the dev build correctly you will need to configure the .env file. Please contact me for this file. It contains the correct URL, API keys and ClientID keys to be able to run everything locally and is provided in a .env file you will need to copy into the root directory of the app.
 
 ```bash
  npx expo start
