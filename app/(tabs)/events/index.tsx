@@ -30,7 +30,7 @@ export default function Homepage() {
 
   return (
     <View>
-      <Text style={styles.headerText}>Upcoming Events</Text>
+      <Text style={styles.headerText}>Events</Text>
       <View style={styles.eventListContainer}>
         <FlatList
           data={eventsList}
