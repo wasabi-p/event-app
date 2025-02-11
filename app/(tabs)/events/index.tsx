@@ -11,10 +11,10 @@ export default function Homepage() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      setLoading(true)
+      setLoading(true);
       const events = await getEventsList();
       setEventsList(events);
-      setLoading(false)
+      setLoading(false);
     };
     fetchEvents();
   }, []);
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 130,
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 30,
     fontFamily: "Roboto",
     fontWeight: "900",
     color: "black",
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     padding: 10,
     margin: 5,
+    letterSpacing: 2,
   },
   emptyNotification: {
     textAlign: "center",

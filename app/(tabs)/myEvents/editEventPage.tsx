@@ -43,7 +43,7 @@ export default function newEvent() {
           setEventName(eventData.event_name);
           setVenue(eventData.venue);
           setDate(new Date(eventData.event_date));
-          setTime(new Date(`1988-05-25T${eventData.start_time}Z`));
+          setTime(new Date(`1988-05-25T${eventData.start_time}`));
           setDescription(eventData.description);
         } else {
           Alert.alert("Error", "Failed to fetch event details");

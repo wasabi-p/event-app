@@ -116,3 +116,16 @@ export const fetchEventsByIds = async (
   }
   return data;
 };
+
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const day = date.getDate();
+  const suffix = ["th", "st", "nd", "rd"][(day % 10) > 3 || [11, 12, 13].includes(day) ? 0 : day % 10];
+
+  const formattedDate = `${day}${suffix} ${date.toLocaleString("en-US", {
+    month: "short",
+  })} '${date.getFullYear().toString().slice(-2)}`;
+
+  return formattedDate;
+};

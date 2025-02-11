@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Event } from "@/utils/types";
+import { formatDate } from "@/utils/utils";
 import { router } from "expo-router";
 
 interface EventCardProps {
@@ -17,9 +18,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => (
       <View>
         <Text style={styles.eventTitle}>{event.event_name}</Text>
         <Text style={styles.eventDetails}>{event.venue}</Text>
-        <Text style={styles.eventDetails}>
-          {event.event_date}
-        </Text>
+        <Text style={styles.eventDetails}>{formatDate(event.event_date)}</Text>
       </View>
     </TouchableOpacity>
   </View>

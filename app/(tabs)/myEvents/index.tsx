@@ -6,10 +6,12 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from "react-native";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import MyEventsCard from "@/components/MyEventsCard";
 import MyAttendingEventCard from "@/components/AttendingEventCard";
-import { useEffect, useState } from "react";
 import {
   fetchEventsByIds,
   fetchUserId,
@@ -17,79 +19,63 @@ import {
   selectMyAttendingList,
 } from "@/utils/utils";
 import { Event } from "@/utils/types";
-import supabase from "@/lib/supabase";
 
-export default function myEventsPage() {
+export default function MyEventsPage() {
+  const { user, loading: authLoading } = useAuth(); // 🔹 Use authentication state
   const [loading, setLoading] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [myEventsList, setMyEventsList] = useState<Event[]>([]);
   const [myAttendingList, setMyAttendingList] = useState<any[]>([]);
-  const [viewingMyEvents, setViewingMyEvents] = useState<boolean>(false);
+  const [viewingMyEvents, setViewingMyEvents] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchMyEventsPageInfo = async () => {
+      if (!user) return; // 🔹 Ensure user is logged in before fetching
+
       setLoading(true);
+      try {
+        const loggedInUser = await fetchUserId();
+        if (!loggedInUser) {
+          console.error("No User logged in");
+          setMyEventsList([]);
+          setMyAttendingList([]);
+          return;
+        }
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session) {
-        setIsLoggedIn(false);
+        const [myEvents, myAttendingEventIds] = await Promise.all([
+          getMyEventsList(loggedInUser).catch((error) => {
+            console.error(error, "Error fetching events");
+            return [];
+          }),
+          selectMyAttendingList(loggedInUser).catch((error) => {
+            console.error(error, "Error fetching attending list");
+            return [];
+          }),
+        ]);
+
+        setMyEventsList(myEvents);
+
+        if (myAttendingEventIds.length > 0) {
+          const attendingEventIds = myAttendingEventIds.map(
+            (item: { event_id: string }) => item.event_id
+          );
+
+          const attendingEvents = await fetchEventsByIds(attendingEventIds);
+          setMyAttendingList(attendingEvents);
+        } else {
+          setMyAttendingList([]);
+        }
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setIsLoggedIn(true);
-
-      fetchUserId()
-        .then((loggedInUser) => {
-          if (!loggedInUser) {
-            console.error("No User logged in");
-            setMyEventsList([]);
-            setMyAttendingList([]);
-            return;
-          }
-          return Promise.all([
-            getMyEventsList(loggedInUser).catch((error) => {
-              console.error(error, "Error fetching events");
-              return [];
-            }),
-            selectMyAttendingList(loggedInUser).catch((error) => {
-              console.error(error, "Error fetching attending list");
-              return [];
-            }),
-          ]);
-        })
-        .then((results) => {
-          if (!results) return;
-          const [myEvents, myAttendingEventIds] = results;
-          setMyEventsList(myEvents);
-
-          if (myAttendingEventIds.length > 0) {
-            const attendingEventIds = myAttendingEventIds.map(
-              (item: { event_id: string }) => item.event_id
-            );
-
-            fetchEventsByIds(attendingEventIds)
-              .then((attendingEvents) => {
-                setMyAttendingList(attendingEvents);
-              })
-              .catch((error) => {
-                console.error("Error fetching full event details:", error);
-                setMyAttendingList([]);
-              });
-          } else {
-            setMyAttendingList([]);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
     };
-    fetchMyEventsPageInfo();
-  }, []);
 
-  if (loading) {
+    if (!authLoading) fetchMyEventsPageInfo();
+  }, [user, authLoading]); // 🔹 Re-run when authentication state changes
+
+  // 🔹 If still checking authentication, show loading screen
+  if (authLoading || loading) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color="orange" />
@@ -98,7 +84,8 @@ export default function myEventsPage() {
     );
   }
 
-  if (!isLoggedIn) {
+  // 🔹 If no user, show login prompt
+  if (!user) {
     return (
       <View style={styles.noUserPageContainer}>
         <Button
@@ -109,6 +96,8 @@ export default function myEventsPage() {
       </View>
     );
   }
+
+  // 🔹 My Events List
   const MyEventsList = () => (
     <FlatList
       data={myEventsList}
@@ -123,6 +112,7 @@ export default function myEventsPage() {
     />
   );
 
+  // 🔹 Attending Events List
   const MyAttendingList = () => (
     <FlatList
       data={myAttendingList}
@@ -143,21 +133,30 @@ export default function myEventsPage() {
         <Button
           color="orange"
           title="+ Create New Event"
-          onPress={() => router.replace("/(tabs)/myEvents/newEventPage")}
+          onPress={() => router.push("/(tabs)/myEvents/newEventPage")}
         />
       </View>
-      <View style={styles.listContainer}>
-        <Button
-          title="My Events"
+
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tabButton, viewingMyEvents && styles.activeTab]}
           onPress={() => setViewingMyEvents(true)}
-          color={viewingMyEvents ? "purple" : "gray"}
-        />
-        <Button
-          title="Attending"
+        >
+          <Text style={[styles.tabText, viewingMyEvents && styles.activeTabText]}>
+            My Events
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.tabButton, !viewingMyEvents && styles.activeTab]}
           onPress={() => setViewingMyEvents(false)}
-          color={!viewingMyEvents ? "purple" : "gray"}
-        />
+        >
+          <Text style={[styles.tabText, !viewingMyEvents && styles.activeTabText]}>
+            Attending
+          </Text>
+        </TouchableOpacity>
       </View>
+
       <View style={styles.listContainer}>
         {viewingMyEvents ? MyEventsList() : MyAttendingList()}
       </View>
@@ -182,21 +181,38 @@ const styles = StyleSheet.create({
   createContainer: {
     marginBottom: 10,
   },
-  listContainer: {
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 10,
     marginBottom: 10,
   },
-  sectionContainer: {
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  activeTab: {
+    backgroundColor: "purple",
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "gray",
+  },
+  activeTabText: {
+    color: "white",
+  },
+  listContainer: {
     marginBottom: 10,
   },
   loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  header: {
-    fontWeight: "800",
-    fontSize: 15,
-    marginBottom: 5,
   },
   emptyNotification: {
     textAlign: "center",

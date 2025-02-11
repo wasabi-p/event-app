@@ -54,7 +54,7 @@ export default function accountProfile() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Account Profile</Text>
+      <Text style={styles.title}>Profile</Text>
       <Image
         source={{
           uri: "https://gckoifagibogjyspagxt.supabase.co/storage/v1/object/public/eventappbuckket/account.png",
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
+    letterSpacing: 2
   },
   verticallySpaced: {
     paddingTop: 4,
