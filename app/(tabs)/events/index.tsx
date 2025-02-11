@@ -1,8 +1,8 @@
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { useEffect, useState } from "react";
@@ -58,16 +58,28 @@ export default function Homepage() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.headerText}>Events</Text>
       <View style={styles.sortButtonContainer}>
-        <Text style={styles.sortLabel}>Sort By:</Text>
-        <Button
-          title={sortAscending ? "Oldest" : "Newest"}
-          onPress={() => setSortAscending(!sortAscending)}
-          color="purple"
-        />
+        <TouchableOpacity
+          style={[styles.sortButton, sortAscending && styles.activeButton]}
+          onPress={() => setSortAscending(true)}
+        >
+          <Text style={[styles.sortButtonText, sortAscending && styles.activeText]}>
+            Oldest
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.sortButton, !sortAscending && styles.activeButton]}
+          onPress={() => setSortAscending(false)}
+        >
+          <Text style={[styles.sortButtonText, !sortAscending && styles.activeText]}>
+            Newest
+          </Text>
+        </TouchableOpacity>
       </View>
+
       <View style={styles.eventListContainer}>
         <FlatList
           data={sortEvents(eventsList)}
@@ -79,18 +91,16 @@ export default function Homepage() {
             </Text>
           }
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
         />
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  eventListContainer: {
-    backgroundColor: "#F9FAFB",
-    paddingTop: 10,
-    paddingHorizontal: 16,
-    paddingBottom: 20,
-    marginBottom: 200
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
   },
   headerText: {
     fontSize: 30,
@@ -98,11 +108,37 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: "black",
     textAlign: "center",
-    width: "90%",
-    alignSelf: "center",
     padding: 10,
     margin: 5,
     letterSpacing: 2,
+  },
+  sortButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 10,
+  },
+  sortButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    backgroundColor: "lightgray",
+  },
+  activeButton: {
+    backgroundColor: "purple",
+  },
+  sortButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+  },
+  activeText: {
+    color: "white",
+  },
+  eventListContainer: {
+    backgroundColor: "#F9FAFB",
+    paddingHorizontal: 16,
   },
   emptyNotification: {
     textAlign: "center",
@@ -114,16 +150,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  sortButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  sortLabel: {
-    fontSize: 16,
-    marginRight: 10,
-    fontWeight: "bold",
   },
 });

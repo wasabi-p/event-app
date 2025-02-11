@@ -28,8 +28,6 @@ export default function newEvent() {
 
   const insertEvent = async () => {
     setIsSubmitting(true);
-    console.log(time)
-    console.log(date)
     const eventDate = dayjs(date).format("YYYY-MM-DD");
     const startTime = dayjs(time).format("HH:mm:ss");
 
