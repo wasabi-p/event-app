@@ -21,7 +21,7 @@ import {
 import { Event } from "@/utils/types";
 
 export default function MyEventsPage() {
-  const { user, loading: authLoading } = useAuth(); // 🔹 Use authentication state
+  const { user, loading: authLoading } = useAuth(); 
   const [loading, setLoading] = useState<boolean>(false);
   const [myEventsList, setMyEventsList] = useState<Event[]>([]);
   const [myAttendingList, setMyAttendingList] = useState<any[]>([]);
@@ -29,7 +29,7 @@ export default function MyEventsPage() {
 
   useEffect(() => {
     const fetchMyEventsPageInfo = async () => {
-      if (!user) return; // 🔹 Ensure user is logged in before fetching
+      if (!user) return;
 
       setLoading(true);
       try {
@@ -72,9 +72,8 @@ export default function MyEventsPage() {
     };
 
     if (!authLoading) fetchMyEventsPageInfo();
-  }, [user, authLoading]); // 🔹 Re-run when authentication state changes
+  }, [user, authLoading]);
 
-  // 🔹 If still checking authentication, show loading screen
   if (authLoading || loading) {
     return (
       <View style={styles.loading}>
@@ -84,7 +83,6 @@ export default function MyEventsPage() {
     );
   }
 
-  // 🔹 If no user, show login prompt
   if (!user) {
     return (
       <View style={styles.noUserPageContainer}>
@@ -97,7 +95,6 @@ export default function MyEventsPage() {
     );
   }
 
-  // 🔹 My Events List
   const MyEventsList = () => (
     <FlatList
       data={myEventsList}
@@ -112,7 +109,6 @@ export default function MyEventsPage() {
     />
   );
 
-  // 🔹 Attending Events List
   const MyAttendingList = () => (
     <FlatList
       data={myAttendingList}

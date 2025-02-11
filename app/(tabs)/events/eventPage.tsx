@@ -8,99 +8,84 @@ import {
   StyleSheet,
   Text,
   View,
+  Button,
 } from "react-native";
 import { getEventDetails, formatDate } from "@/utils/utils";
 import { Event } from "@/utils/types";
-import { Button } from "react-native";
 import supabase from "@/lib/supabase";
 import * as Calendar from "expo-calendar";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { useAuth } from "@/context/AuthContext";
 
-const eventPage = () => {
+const EventPage = () => {
   const { event_id } = useLocalSearchParams();
+  const { user } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<any>(null);
   const [isAttending, setIsAttending] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
 
-    supabase.auth
-      .getUser()
-      .then(({ data: { user } }) => {
-        setUser(user);
+    getEventDetails(+event_id)
+      .then((eventDetails) => {
+        if (!eventDetails) {
+          console.error("Event not found");
+          throw new Error("Event not found");
+        }
+        setEvent(eventDetails);
 
-        return getEventDetails(+event_id).then((eventDetails) => {
-          if (eventDetails) {
-            setEvent(eventDetails);
-          } else {
-            console.error("Event not found");
-            throw new Error("Event not found");
-          }
-
-          if (user) {
-            return supabase
+        return user
+          ? supabase
               .from("attending")
               .select("event_id, user_id")
               .eq("user_id", user.id)
               .eq("event_id", event_id)
-              .single();
-          }
-        });
+              .single()
+          : Promise.resolve(null);
       })
       .then(
         (
-          response:
-            | PostgrestSingleResponse<{ event_id: any; user_id: any }>
-            | undefined
+          response: PostgrestSingleResponse<{
+            event_id: any;
+            user_id: any;
+          }> | null
         ) => {
-          if (response?.data) {
-            setIsAttending(true);
-          } else {
-            setIsAttending(false);
-          }
+          setIsAttending(!!response?.data);
         }
       )
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching event data:", error);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [event_id]);
+  }, [event_id, user]);
 
   const toggleAttendance = () => {
     if (!user) {
       console.error("User not logged in");
-      return Promise.resolve();
+      return;
     }
 
-    const toggle = (
-      isAttending
-        ? supabase
-            .from("attending")
-            .delete()
-            .match({ user_id: user.id, event_id: event_id })
-            .then((result) => {
-              if (result.error) {
-                throw new Error(result.error.message);
-              }
-              return result;
-            })
-        : supabase
-            .from("attending")
-            .upsert({ user_id: user.id, event_id: event_id })
-    ).then((result) => {
-      if (result.error) {
-        throw new Error(result.error.message);
-      }
-      return result;
-    });
+    const action = isAttending
+      ? supabase
+          .from("attending")
+          .delete()
+          .match({ user_id: user.id, event_id })
+      : supabase.from("attending").upsert({ user_id: user.id, event_id });
 
-    toggle.then(() => {
-      setIsAttending(!isAttending);
-    });
+    Promise.resolve(action)
+      .then(({ error }) => {
+        if (error) {
+          console.error("Error toggling attendance:", error);
+          return Promise.reject(error);
+        }
+        setIsAttending((prev) => !prev);
+      })
+      .catch((error) => {
+        console.error("Error toggling attendance:", error);
+      });
   };
 
   const saveToCalendar = () => {
@@ -116,21 +101,16 @@ const eventPage = () => {
         const defaultCalendar = calendars.find(
           (cal) => cal.allowsModifications
         );
-        if (!defaultCalendar) {
-          Alert.alert("Error", "No calendar found.");
-          throw new Error("No writable calendar found");
-        }
-
-        if (!event) {
-          Alert.alert("Error", "Event details are missing.");
-          throw new Error("Event details are missing");
+        if (!defaultCalendar || !event) {
+          Alert.alert("Error", "No writable calendar found or event missing.");
+          throw new Error("No writable calendar found or event missing");
         }
 
         const eventStartDate = new Date(
           `${event.event_date}T${event.start_time}`
         );
         const eventEndDate = new Date(eventStartDate);
-        eventEndDate.setHours(24, 0, 0, 0);
+        eventEndDate.setHours(eventStartDate.getHours() + 2);
 
         return Calendar.createEventAsync(defaultCalendar.id, {
           title: event.event_name,
@@ -140,10 +120,13 @@ const eventPage = () => {
           notes: event.description,
         });
       })
-      .then(() => {
+      .then((eventId) => {
+        if (!eventId) {
+          throw new Error("Failed to save event to calendar.");
+        }
         Alert.alert(
           "Success",
-          "Event added to your calendar! Please allow a few minutes for it to appear"
+          "Event added to your calendar! This may take a few minutes to show up"
         );
       })
       .catch((error) => {
@@ -156,7 +139,7 @@ const eventPage = () => {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color="orange" />
-        <Text>Loading our events...</Text>
+        <Text>Loading event details...</Text>
       </View>
     );
   }
@@ -173,14 +156,14 @@ const eventPage = () => {
     <View style={styles.eventPageContainer}>
       <Text style={styles.title}>{event.event_name}</Text>
       <Image source={{ uri: event.img }} style={styles.eventImage} />
-        <View style={styles.eventDetailsContainer}>
-          <Text style={styles.eventDetails}>{event.venue}</Text>
-          <Text style={styles.eventDetails}>{formatDate(event.event_date)}</Text>
-          <Text style={styles.eventDetails}>Start: {event.start_time}</Text>
-        </View>
+      <View style={styles.eventDetailsContainer}>
+        <Text style={styles.eventDetails}>{event.venue}</Text>
+        <Text style={styles.eventDetails}>{formatDate(event.event_date)}</Text>
+        <Text style={styles.eventDetails}>Start: {event.start_time}</Text>
+      </View>
 
       <ScrollView style={styles.detailsScroll}>
-          <Text style={styles.eventDetailText}>{event.description}</Text>
+        <Text style={styles.eventDetailText}>{event.description}</Text>
       </ScrollView>
 
       {user && (
@@ -224,20 +207,16 @@ const styles = StyleSheet.create({
   detailsScroll: {
     margin: 2,
     flex: 1,
-    maxHeight:200,
+    maxHeight: 200,
     width: "100%",
-    paddingHorizontal: 15
-  },
-  detailsContent: {
-    flexGrow: 1,
-    paddingBottom: 20,
+    paddingHorizontal: 15,
   },
   eventDetailsContainer: {
     alignItems: "center",
     gap: 8,
     paddingHorizontal: 20,
   },
-  eventDetails:{
+  eventDetails: {
     fontSize: 15,
     textAlign: "center",
     color: "#333",
@@ -249,7 +228,7 @@ const styles = StyleSheet.create({
   attendButton: {
     marginTop: 10,
     alignSelf: "stretch",
-    borderRadius: 5
+    borderRadius: 5,
   },
   loading: {
     flex: 1,
@@ -263,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default eventPage;
+export default EventPage;
