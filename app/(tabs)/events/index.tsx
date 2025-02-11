@@ -1,4 +1,10 @@
-import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  FlatList,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useEffect, useState } from "react";
 import EventCard from "@/components/EventCard";
 import { Event } from "@/utils/types";
@@ -8,6 +14,29 @@ import { Text } from "react-native";
 export default function Homepage() {
   const [loading, setLoading] = useState(true);
   const [eventsList, setEventsList] = useState<Event[]>([]);
+  const [sortAscending, setSortAscending] = useState<boolean>(true);
+
+  const sortEvents = (events: Event[]) => {
+    return [...events].sort((a, b) => {
+      const dateA = new Date(a.event_date);
+      const dateB = new Date(b.event_date);
+
+      if (dateA.getTime() !== dateB.getTime()) {
+        return sortAscending
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime();
+      }
+
+      const timeA = a.start_time
+        ? new Date(`${a.event_date}T${a.start_time}`).getTime()
+        : 0;
+      const timeB = b.start_time
+        ? new Date(`${b.event_date}T${b.start_time}`).getTime()
+        : 0;
+
+      return sortAscending ? timeA - timeB : timeB - timeA;
+    });
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -31,9 +60,17 @@ export default function Homepage() {
   return (
     <View>
       <Text style={styles.headerText}>Events</Text>
+      <View style={styles.sortButtonContainer}>
+        <Text style={styles.sortLabel}>Sort By:</Text>
+        <Button
+          title={sortAscending ? "Oldest First" : "Newest First"}
+          onPress={() => setSortAscending(!sortAscending)}
+          color="purple"
+        />
+      </View>
       <View style={styles.eventListContainer}>
         <FlatList
-          data={eventsList}
+          data={sortEvents(eventsList)}
           keyExtractor={(item) => item.event_id.toString()}
           renderItem={({ item }) => <EventCard event={item} />}
           ListEmptyComponent={
@@ -52,7 +89,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     paddingTop: 10,
     paddingHorizontal: 16,
-    marginBottom: 130,
+    paddingBottom: 20,
+    marginBottom: 200
   },
   headerText: {
     fontSize: 30,
@@ -76,5 +114,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  sortButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  sortLabel: {
+    fontSize: 16,
+    marginRight: 10,
+    fontWeight: "bold",
   },
 });
