@@ -9,13 +9,13 @@ This project has been tested and developed on <b>Android 15</b>, please ensure y
 You should be able to access a preview build of the app using Expo Go and following this link:
 <br>
 <br>
-<img src="https://qr.expo.dev/eas-update?slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&groupId=299395ff-59a0-4149-97e8-d7d010dfc877&host=u.expo.dev" alt="qr" width="300">
+<img src="https://qr.expo.dev/eas-update?slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&groupId=0ae7c867-1957-425f-87f3-16272ab58c80&host=u.expo.dev" alt="qr" width="300">
 <br>
 <br>
 or
 <br>
 <br>
-https://expo.dev/preview/update?message=%20bug%20fix%20landing%20page&updateRuntimeVersion=1.0.0&createdAt=2025-02-10T16%3A36%3A29.054Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=299395ff-59a0-4149-97e8-d7d010dfc877
+https://expo.dev/preview/update?message=login%20flow%20fixed%2C%20general%20ui%20and%20styling%20changes&updateRuntimeVersion=1.0.0&createdAt=2025-02-11T21%3A27%3A52.605Z&slug=exp&projectId=ed04246c-7945-41c4-9f33-c94187494cdc&group=0ae7c867-1957-425f-87f3-16272ab58c80
 <br>
 <br>
 

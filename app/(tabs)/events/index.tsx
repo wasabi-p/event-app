@@ -63,7 +63,7 @@ export default function Homepage() {
       <View style={styles.sortButtonContainer}>
         <Text style={styles.sortLabel}>Sort By:</Text>
         <Button
-          title={sortAscending ? "Oldest First" : "Newest First"}
+          title={sortAscending ? "Oldest" : "Newest"}
           onPress={() => setSortAscending(!sortAscending)}
           color="purple"
         />
